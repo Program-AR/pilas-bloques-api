@@ -1,35 +1,32 @@
-import * as mongoose from 'mongoose'
-const Schema = mongoose.Schema
+import { prop, getModelForClass, ReturnModelType, Severity, modelOptions } from '@typegoose/typegoose'
 
-const User = new Schema({
-  credentials: {
-    username: {
-      type: String,
-      required: true,
-      unique: true
-    },
-    salt: {
-      type: String,
-      required: true,
-    },
-    hashedPassword: {
-      type: String,
-      required: true,
-    },
-    parentName: {
-      type: String,
-      required: true,
-    },
-    parentCUIL: {
-      type: String,
-      required: true,
-    }
-  },
+class Credentials {
+  @prop({ required: true, unique: true })
+  username: string
+  @prop({ required: true })
+  salt: string
+  @prop({ required: true })
+  hashedPassword: string
+  @prop({ required: true })
+  parentName: string
+  @prop({ required: true })
+  parentCUIL: string
+}
+@modelOptions({ options: { allowMixed: Severity.ALLOW } })
+export class User {
+  @prop({ _id: false, required: true })
+  credentials: Credentials
+
+  @prop({ _id: false })
   profile: {
-    avatarURL: String
+    nickName: string
+    avatarURL: string
   }
-}, {
-  timestamps: true
-})
 
-export default mongoose.model('User', User)
+  static findByUsername(this: ReturnModelType<typeof User>, username: string) {
+    return this.findOne({ 'credentials.username': username })
+  }
+}
+
+
+export default getModelForClass<typeof User>(User)
