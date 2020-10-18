@@ -20,11 +20,11 @@ export const verifyPassword = (password: string, { salt, hashedPassword }: Encod
 
 
 type TokenData = {
-  userId: string
+  username: string
 }
 
 const secret = process.env.JWT_SECRET || 'test'
 
 export const generateToken = (data: TokenData): string => jwt.sign(data, secret)
 
-export const parseToken = (token: string): TokenData => jwt.verify(token, secret)
+export const parseToken = (token: string): TokenData => jwt.verify(token, secret) as TokenData

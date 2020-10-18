@@ -7,7 +7,7 @@
     "build": "tsc",
     "lint": "eslint .",
     "start": "node dist/src/index.js",
-    "test": "jest --colors --testPathIgnorePatterns dist --testTimeout 5000"
+    "test": "jest --colors --testPathIgnorePatterns dist --testTimeout 5000 --runInBand"
   },
   "author": "Fundación Sadosky",
   "license": "ISC",

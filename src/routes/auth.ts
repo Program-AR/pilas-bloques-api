@@ -1,30 +1,30 @@
-import User from '../models/user'
 import * as express from 'express'
-import * as mongoose from 'mongoose'
 import { syncHandler } from './utils'
-import { EntityNotFound } from './errorHandlers'
-import { generatePassword, verifyPassword, generateToken, parseToken } from '../models/auth';
+import { DocumentType } from '@typegoose/typegoose'
+import UserModel, { User } from '../models/user'
+import { generatePassword, verifyPassword, generateToken, parseToken } from '../models/auth'
 
-type AuthteticatedRequest = express.Request & { user: typeof User }
+type AuthteticatedRequest = express.Request & { user: DocumentType<User> }
 
 const router = express.Router()
 
 router.post('/register', syncHandler(async ({ body }: AuthteticatedRequest, res) => {
-  const credentials = { ...body.credentials, ...generatePassword(body.documentNumber) }
-  const user = await User.create({ ...body, credentials })
-  res.json(user)
+  const credentials = { ...body.credentials, ...generatePassword(body.credentials.password) }
+  const user = await UserModel.create({ ...body, credentials })
+  res.json(user.profile)
 }))
 
 router.post('/login', syncHandler(async ({ body }: AuthteticatedRequest, res) => {
-  const user = User.findByName(body.username)
-  if (!verifyPassword(body.password, user.credentials)) throw "Contraseña incorrecta"
-  const token = generateToken({ userId: user._id })
-  res.json(token)
+  const user = await UserModel.findByUsername(body.username).exec()
+  if (!user || !verifyPassword(body.password, user.credentials)) throw "Contraseña incorrecta"
+  const token = generateToken({ username: user.credentials.username })
+  res.json({ token, ...user.profile })
 }))
 
 const tokenAuth = syncHandler(async (req: AuthteticatedRequest, res, next) => {
-  const { userId } = parseToken(req.params['access_token'])
-  const user = await User.findById(userId).exec()
+  const queryparams = req.query as any
+  const { username } = parseToken(queryparams['access_token'])
+  const user = await UserModel.findByUsername(username).exec()
   if (!user) throw "Fallo de sesión"
   req.user = user
   next()

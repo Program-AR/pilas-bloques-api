@@ -33,3 +33,7 @@ export const flushDB = () => {
 export const matchBody = <T = any>(expected: T) => (res: Request.Response) => {
   expect(res.body).toMatchObject(expected)
 }
+
+export const hasBodyProperty = (prop: string) => (res: Request.Response) => {
+  expect(res.body).toHaveProperty(prop)
+}
