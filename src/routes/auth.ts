@@ -26,6 +26,11 @@ router.post('/login', syncHandler(async ({ body }: AuthteticatedRequest, res) =>
   res.json({ token, ...user.profile })
 }))
 
+router.get('/register/check', syncHandler(async ({ query }: AuthteticatedRequest, res) => {
+  const user = await UserModel.findByUsername(query['username'] as string).exec()
+  res.json(!user)
+}))
+
 router.get('/profile', tokenAuth, syncHandler(async ({ user }: AuthteticatedRequest, res) => {
   res.json(user.profile)
 }))
