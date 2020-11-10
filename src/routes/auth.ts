@@ -4,21 +4,25 @@ import { DocumentType } from '@typegoose/typegoose'
 import UserModel, { User } from '../models/user'
 import { generatePassword, verifyPassword, generateToken } from '../models/auth'
 import { tokenAuth } from './middlewares'
+import { HttpCodeError } from './errorHandlers'
 
 type AuthteticatedRequest = express.Request & { user: DocumentType<User> }
+
+const newToken = (user: User) => generateToken({ username: user.credentials.username })
 
 const router = express.Router()
 
 router.post('/register', syncHandler(async ({ body }: AuthteticatedRequest, res) => {
   const credentials = { ...body.credentials, ...generatePassword(body.credentials.password) }
   const user = await UserModel.create({ ...body, credentials })
-  res.json(user.profile)
+  const token = newToken(user)
+  res.json({ token, ...user.profile })
 }))
 
 router.post('/login', syncHandler(async ({ body }: AuthteticatedRequest, res) => {
   const user = await UserModel.findByUsername(body.username).exec()
-  if (!user || !verifyPassword(body.password, user.credentials)) throw "Contraseña incorrecta"
-  const token = generateToken({ username: user.credentials.username })
+  if (!user || !verifyPassword(body.password, user.credentials)) throw new HttpCodeError(400, "Contraseña incorrecta")
+  const token = newToken(user)
   res.json({ token, ...user.profile })
 }))
 
