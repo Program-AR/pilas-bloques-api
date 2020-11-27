@@ -11,6 +11,8 @@ class Credentials {
   parentName: string
   @prop({ required: true })
   parentCUIL: string
+  @prop()
+  email: string
 }
 @modelOptions({ options: { allowMixed: Severity.ALLOW } })
 export class User {
