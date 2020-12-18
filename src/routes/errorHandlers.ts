@@ -52,8 +52,32 @@ export class HttpCodeError extends Error {
   }
 }
 
+export class Unauthorized extends HttpCodeError {
+  constructor(message = 'Unauthorized') {
+    super(401, message)
+  }
+}
+
 export class EntityNotFound extends HttpCodeError {
   constructor(entity: string, id?: any) {
     super(404, `${entity}${id ? `(${id})` : ''} not found.`)
+  }
+}
+
+export class ClientError extends HttpCodeError {
+  constructor(msg: string) {
+    super(400, msg)
+  }
+}
+
+export class ParametersNotFound extends ClientError {
+  constructor(label?: string, ...fields: string[]) {
+    super(`Missing ${label} parameters: ${fields.join(', ')}`)
+  }
+}
+
+export class NotFound extends ClientError {
+  constructor(label?: string) {
+    super(`Missing ${label || 'entity'}`)
   }
 }

@@ -1,5 +1,6 @@
 import * as jwt from 'jsonwebtoken'
 import * as crypto from 'crypto'
+import { Unauthorized } from '../routes/errorHandlers'
 
 type EncodedPassword = {
   salt: string,
@@ -27,4 +28,7 @@ const secret = process.env.JWT_SECRET || 'test'
 
 export const generateToken = (data: TokenData): string => jwt.sign(data, secret)
 
-export const parseToken = (token: string): TokenData => jwt.verify(token, secret) as TokenData
+export const parseToken = (token: string): TokenData => {
+  try { return jwt.verify(token, secret) as TokenData }
+  catch { throw new Unauthorized() }
+}
