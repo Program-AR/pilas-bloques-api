@@ -16,17 +16,19 @@ describeApi('Users', (request) => {
       .then(hasBodyProperty('token'))
   )
 
-  test('Register missing params', () =>
+  test('Register fails for required attributes', () =>
     request().post('/register')
-      .send({})
-      .expect(400, 'Missing body parameters: credentials, profile')
+      .send({ username, password })
+      .expect(400, 'Path `parentCUIL` is required.\nPath `parentName` is required.')
   )
 
-  // test('Register existing username', () =>
-  //   request().post('/register')
-  //     .send(userJson)
-  //     .expect(400, 'Path `userId` is required.')
-  // )
+  // SKIP: Not working in testing enviroment
+  test.skip('Register existing username', () =>
+    request().post('/register')
+      .send(userJson)
+      .expect(400, 'Duplicate key error.')
+  )
+
 
   test('Login', () =>
     request().post('/login')
@@ -41,6 +43,13 @@ describeApi('Users', (request) => {
       .send({ username: 'NOT_EXIST', password: 'WRONG' })
       .expect(400, 'Wrong credentials')
   )
+
+  test('Login missing params', () =>
+    request().post('/login')
+      .send({})
+      .expect(400, 'Missing body parameters: username, password')
+  )
+
 
   test('Profile', () =>
     request().get(`/profile?access_token=${token}`)
@@ -61,6 +70,7 @@ describeApi('Users', (request) => {
       .expect(401, 'Unauthorized')
   )
 
+  
   test('Check new username', () =>
     request().get(`/register/check?username=RANDOM`)
       .send()
@@ -86,13 +96,12 @@ const username = 'USERNAME'
 const password = 'PASSWORD'
 
 const userJson = {
-  credentials: {
-    username,
-    password,
-    parentName: 'string',
-    parentCUIL: 'string',
 
-  },
+  username,
+  password,
+  parentName: 'string',
+  parentCUIL: 'string',
+
   profile: {
     nickName: username,
     avatarURL: 'string'

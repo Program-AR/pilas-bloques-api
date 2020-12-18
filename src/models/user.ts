@@ -1,7 +1,8 @@
 import { prop, getModelForClass, ReturnModelType, Severity, modelOptions } from '@typegoose/typegoose'
 
-class Credentials {
-  @prop({ required: true, unique: true })
+@modelOptions({ options: { allowMixed: Severity.ALLOW } })
+export class User {
+  @prop({ required: true, index: true, unique: true })
   username: string
   @prop({ required: true })
   salt: string
@@ -13,11 +14,6 @@ class Credentials {
   parentCUIL: string
   @prop()
   email: string
-}
-@modelOptions({ options: { allowMixed: Severity.ALLOW } })
-export class User {
-  @prop({ _id: false, required: true })
-  credentials: Credentials
 
   @prop({ _id: false })
   profile: {
@@ -26,7 +22,7 @@ export class User {
   }
 
   static findByUsername(this: ReturnModelType<typeof User>, username: string) {
-    return this.findOne({ 'credentials.username': username })
+    return this.findOne({ 'username': username })
   }
 }
 

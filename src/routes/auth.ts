@@ -8,20 +8,19 @@ import { HttpCodeError } from './errorHandlers'
 
 type AuthteticatedRequest = express.Request & { user: DocumentType<User> }
 
-const newToken = (user: User) => generateToken({ username: user.credentials.username })
+const newToken = (user: User) => generateToken({ username: user.username })
 
 const router = express.Router()
 
-router.post('/register', requiredBody('credentials', 'profile'), syncHandler(async ({ body }: AuthteticatedRequest, res) => {
-  const credentials = { ...body.credentials, ...generatePassword(body.credentials.password) }
-  const user = await UserModel.create({ ...body, credentials })
+router.post('/register', requiredBody('username', 'password'), syncHandler(async ({ body }: AuthteticatedRequest, res) => {
+  const user = await UserModel.create({ ...body, ...generatePassword(body.password) })
   const token = newToken(user)
   res.json({ token, ...user.profile })
 }))
 
 router.post('/login', requiredBody('username', 'password'), syncHandler(async ({ body }: AuthteticatedRequest, res) => {
   const user = await UserModel.findByUsername(body.username).exec()
-  if (!user || !verifyPassword(body.password, user.credentials)) throw new HttpCodeError(400, "Wrong credentials")
+  if (!user || !verifyPassword(body.password, user)) throw new HttpCodeError(400, "Wrong credentials")
   const token = newToken(user)
   res.json({ token, ...user.profile })
 }))

@@ -13,6 +13,7 @@ mongoose.connect(dbUri, {
   useUnifiedTopology: true,
   useFindAndModify: false,
   useCreateIndex: true,
+  autoIndex: true,
 })
 
 // SERVER
