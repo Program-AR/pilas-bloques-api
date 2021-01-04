@@ -36,3 +36,15 @@ const required = (data: any, label: string, fields: string[], next: express.Next
   if (!fields.every(field => data[field])) throw (new ParametersNotFound(label, ...fields.filter(field => !data[field])))
   next()
 }
+
+export const mirrorTo = (url: string) => syncHandler(async (req, _res, next) => {
+  const data = {
+    method: req.method,
+    body: req.body,
+    headers: Object.entries(req.headers) as string[][]
+  }
+  fetch(url, data).catch(err => {
+    console.log("MIRRORING FAILED", err)
+  })
+  next()
+})
