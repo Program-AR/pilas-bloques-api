@@ -56,3 +56,7 @@ export const tryy = (handler: RequestHandler): RequestHandler => (req, _res, nex
     next()
   }
 }
+
+export const onlyIfAuth : RequestHandler = (req: AutheticatedRequest, res, next) => {
+  if (req.user) { next() } else { res.end() }
+}

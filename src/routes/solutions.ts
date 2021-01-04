@@ -1,29 +1,20 @@
 import * as express from 'express'
 import { syncHandler } from './utils'
-import { DocumentType } from '@typegoose/typegoose'
-import UserModel, { User } from '../models/user'
-import { tokenAuth, requiredBody, requiredQueryParams, mirrorTo, tryy, AutheticatedRequest } from './middlewares'
-import { HttpCodeError } from './errorHandlers'
+import { tokenAuth, mirrorTo, tryy, AutheticatedRequest, onlyIfAuth } from './middlewares'
 
 const router = express.Router()
 
 const mirror = mirrorTo(process.env.PB_ANALYTICS_URI)
 
-router.post('/challenges', mirror, syncHandler(async (req, res) => {
-  // Do nothing
-  console.log("challenges", req.body)
+router.post('/challenges', mirror)
+
+router.post('/solutions', mirror, tryy(tokenAuth), onlyIfAuth, syncHandler(async (req: AutheticatedRequest, res) => {
+  // TODO: Save req.user solution
   res.end()
 }))
 
-router.post('/solutions', mirror, tryy(tokenAuth), syncHandler(async (req: AutheticatedRequest, res) => {
-  // TODO: Save user solution if logged
-  console.log("solutions", req.user)
-  res.end()
-}))
-
-router.put('/solutions/:id', mirror, tryy(tokenAuth), syncHandler(async (req, res) => {
-  // TODO: Update user solution if logged
-  console.log("result", req.body)
+router.put('/solutions/:id', mirror, tryy(tokenAuth), onlyIfAuth, syncHandler(async (req: AutheticatedRequest, res) => {
+  // TODO: Update req.user solution
   res.end()
 }))
 
