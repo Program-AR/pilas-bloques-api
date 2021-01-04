@@ -1,15 +1,14 @@
 import fetch from 'node-fetch'
 import * as express from 'express'
-import { syncHandler } from './utils'
+import { syncHandler, RequestHandler } from './utils'
 import { DocumentType } from '@typegoose/typegoose'
 import UserModel, { User } from '../models/user'
 import { parseToken } from '../models/auth'
 import { NotFound, ParametersNotFound, Unauthorized } from './errorHandlers'
 
-type AuthteticatedRequest = express.Request & { user: DocumentType<User> }
+export type AutheticatedRequest = express.Request & { user: DocumentType<User> }
 
-
-export const tokenAuth = syncHandler(async (req: AuthteticatedRequest, res, next) => {
+export const tokenAuth = syncHandler(async (req: AutheticatedRequest, _res, next) => {
   const { username } = parseToken(accessToken(req))
   const user = await UserModel.findByUsername(username).exec()
   if (!user) throw new Unauthorized()
@@ -17,18 +16,18 @@ export const tokenAuth = syncHandler(async (req: AuthteticatedRequest, res, next
   next()
 })
 
-const accessToken = (req: AuthteticatedRequest): string => {
-  const token = req.query['access_token'] as string
+const accessToken = (req: AutheticatedRequest): string => {
+  const token = req.query['access_token'] as string || req.header('authorization')?.replace('Bearer ', '')
   if (!token) throw new NotFound('access token')
   return token
 }
 
-export const requiredBody = (...fields: string[]) => syncHandler(async (req: AuthteticatedRequest, res, next) => {
+export const requiredBody = (...fields: string[]) => syncHandler(async (req: AutheticatedRequest, _res, next) => {
   required(req.body, 'body', fields, next)
 })
 
 
-export const requiredQueryParams = (...fields: string[]) => syncHandler(async (req: AuthteticatedRequest, res, next) => {
+export const requiredQueryParams = (...fields: string[]) => syncHandler(async (req: AutheticatedRequest, _res, next) => {
   required(req.query, 'query', fields, next)
 })
 
@@ -38,7 +37,7 @@ const required = (data: any, label: string, fields: string[], next: express.Next
   next()
 }
 
-export const mirrorTo = (url: string) => syncHandler(async (req, _res, next) => {
+export const mirrorTo = (url: string): RequestHandler => (req, _res, next) => {
   const data = {
     method: req.method,
     body: req.body,
@@ -48,4 +47,12 @@ export const mirrorTo = (url: string) => syncHandler(async (req, _res, next) => 
     console.log("MIRRORING FAILED", err)
   })
   next()
-})
+}
+
+export const tryy = (handler: RequestHandler): RequestHandler => (req, _res, next) => {
+  try {
+    handler(req, _res, () => next())
+  } catch {
+    next()
+  }
+}
