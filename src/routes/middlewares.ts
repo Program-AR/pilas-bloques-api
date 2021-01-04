@@ -40,10 +40,10 @@ const required = (data: any, label: string, fields: string[], next: express.Next
 export const mirrorTo = (url: string): RequestHandler => (req, _res, next) => {
   const data = {
     method: req.method,
-    body: req.body,
+    body: JSON.stringify(req.body),
     headers: Object.entries(req.headers) as string[][]
   }
-  fetch(url, data).catch(err => {
+  fetch(url + req.path, data).catch(err => {
     console.log("MIRRORING FAILED", err)
   })
   next()
