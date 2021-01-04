@@ -1,10 +1,11 @@
 import * as dotenv from 'dotenv'
 import * as express from 'express'
 import * as mongoose from 'mongoose'
-import routes from './routes'
+
+dotenv.config() // Do first!
 const { log } = console
 
-dotenv.config()
+import routes from './routes'
 
 // DB
 const dbUri = process.env.DB_CONNECTION_URI

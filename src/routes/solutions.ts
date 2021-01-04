@@ -1,4 +1,3 @@
-import fetch from 'node-fetch'
 import * as express from 'express'
 import { syncHandler } from './utils'
 import { DocumentType } from '@typegoose/typegoose'
@@ -9,10 +8,9 @@ import { HttpCodeError } from './errorHandlers'
 
 const router = express.Router()
 
-const analyticsUrl = 'http://localhost:3008' // TODO: ENV VAR
+const mirror = mirrorTo(process.env.PB_ANALYTICS_URI)
 
-
-const mirror = mirrorTo(analyticsUrl)
+console.log(process.env.PB_ANALYTICS_URI)
 
 router.post('/challenges', mirror, syncHandler(async (req, res) => {
   // Do nothing

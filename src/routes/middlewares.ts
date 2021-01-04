@@ -1,3 +1,4 @@
+import fetch from 'node-fetch'
 import * as express from 'express'
 import { syncHandler } from './utils'
 import { DocumentType } from '@typegoose/typegoose'
