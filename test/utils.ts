@@ -18,7 +18,8 @@ export const connectDB = async () => {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
-    useCreateIndex: true
+    useCreateIndex: true,
+    autoIndex: true,
   })
 }
 
@@ -32,4 +33,10 @@ export const flushDB = () => {
 // EXPECTATIONS
 export const matchBody = <T = any>(expected: T) => (res: Request.Response) => {
   expect(res.body).toMatchObject(expected)
+  return res
+}
+
+export const hasBodyProperty = (prop: string) => (res: Request.Response) => {
+  expect(res.body).toHaveProperty(prop)
+  return res
 }
