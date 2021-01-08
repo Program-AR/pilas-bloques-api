@@ -7,7 +7,7 @@
     "build": "tsc",
     "lint": "eslint .",
     "start": "node dist/src/index.js",
-    "test": "jest --colors --testPathIgnorePatterns dist --testTimeout 5000 --runInBand"
+    "test": "DOTENV_CONFIG_PATH=.env.test jest --setupFiles dotenv/config --colors --testPathIgnorePatterns dist --testTimeout 5000 --runInBand"
   },
   "author": "Fundación Sadosky",
   "license": "ISC",
@@ -34,6 +34,7 @@
     "@typescript-eslint/eslint-plugin": "^4.0.1",
     "@typescript-eslint/parser": "^4.0.1",
     "eslint": "^7.8.1",
+    "fetch-mock": "^9.11.0",
     "jest": "^26.4.2",
     "nodemon": "^2.0.4",
     "supertest": "^4.0.2",

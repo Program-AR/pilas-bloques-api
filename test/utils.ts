@@ -1,6 +1,7 @@
 import * as express from 'express'
 import * as Request from 'supertest'
 import * as mongoose from 'mongoose'
+import * as fetchMock from 'fetch-mock'
 import router from '../src/routes'
 
 export type Request = Request.SuperTest<Request.Test>
@@ -31,12 +32,21 @@ export const flushDB = () => {
 }
 
 // EXPECTATIONS
-export const matchBody = <T = any>(expected: T) => (res: Request.Response) => {
+export const matchBody = <T = any>(expected: T) => (res: { body }) => {
   expect(res.body).toMatchObject(expected)
   return res
 }
 
-export const hasBodyProperty = (prop: string) => (res: Request.Response) => {
+export const hasBodyProperty = (prop: string) => (res: { body }) => {
   expect(res.body).toHaveProperty(prop)
   return res
+}
+
+
+export const fetchCalled = (uri: string) => () =>
+  expect(fetchMock.called(`begin:${uri}`)).toBeTruthy()
+
+export const fetchBodyMatch = (expected: any) => () => {
+  const [, { body }] = fetchMock.lastCall()
+  expect(body).toBe(JSON.stringify(expected))
 }
