@@ -1,9 +1,11 @@
 import * as dotenv from 'dotenv'
 import * as express from 'express'
 import * as mongoose from 'mongoose'
+import fetch from 'node-fetch'
 
 dotenv.config() // Do first!
 const { log } = console
+global.fetch = fetch as any
 
 import routes from './routes'
 

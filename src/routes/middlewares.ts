@@ -1,5 +1,3 @@
-// TODO: Set as global
-// import fetch from 'node-fetch'
 import * as express from 'express'
 import { syncHandler, RequestHandler } from './utils'
 import { DocumentType } from '@typegoose/typegoose'
