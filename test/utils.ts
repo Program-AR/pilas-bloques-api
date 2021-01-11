@@ -3,6 +3,7 @@ import * as Request from 'supertest'
 import * as mongoose from 'mongoose'
 import * as fetchMock from 'fetch-mock'
 import router from '../src/routes'
+import { connectDB } from '../src/persistence/db'
 
 export type Request = Request.SuperTest<Request.Test>
 
@@ -12,16 +13,6 @@ export const createServer = async () => {
   const app = express()
   app.use(router)
   return Request(app)
-}
-
-export const connectDB = async () => {
-  await mongoose.connect('mongodb://localhost/pilas-bloques-api-test', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true,
-    autoIndex: true,
-  })
 }
 
 export const dropDB = () => mongoose.connection.dropDatabase()

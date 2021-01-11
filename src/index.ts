@@ -1,25 +1,19 @@
+// ENV VAR
 import * as dotenv from 'dotenv'
-import * as express from 'express'
-import * as mongoose from 'mongoose'
-import fetch from 'node-fetch'
-
 dotenv.config() // Do first!
-const { log } = console
+
+// GLOBALS
+import fetch from 'node-fetch'
 global.fetch = fetch as any
 
-import routes from './routes'
-
 // DB
-const dbUri = process.env.DB_CONNECTION_URI
-mongoose.connect(dbUri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-  useCreateIndex: true,
-  autoIndex: true,
-})
+import { connectDB } from './persistence/db'
+connectDB()
 
 // SERVER
+import * as express from 'express'
+import routes from './routes'
+const { log } = console
 const port = process.env.PORT
 const app = express()
 app.use(routes)
