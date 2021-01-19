@@ -31,10 +31,9 @@ router.put('/credentials', requiredBody('username', 'password', 'parentCUIL'), s
   res.json(authResponse(user))
 }))
 
-// TODO: Change for users/exist
-router.get('/register/check', requiredQueryParams('username'), syncHandler(async ({ query }: AuthteticatedRequest, res) => {
+router.get('/users/exists', requiredQueryParams('username'), syncHandler(async ({ query }: AuthteticatedRequest, res) => {
   const user = await UserModel.findByUsername(query['username'] as string).exec()
-  res.json(!user)
+  res.json(Boolean(user))
 }))
 
 router.get('/profile', tokenAuth, syncHandler(async ({ user }: AuthteticatedRequest, res) => {

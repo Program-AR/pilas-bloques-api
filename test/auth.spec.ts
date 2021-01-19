@@ -97,21 +97,21 @@ describeApi('Users', (request) => {
   })
 
 
-  describe('GET /register/check', () => {
+  describe('GET /users/exists', () => {
     test('Check new username', () =>
-      request().get(`/register/check?username=RANDOM`)
-        .send()
-        .expect(200, 'true')
-    )
-
-    test('Check used username', () =>
-      request().get(`/register/check?username=${username}`)
+      request().get(`/users/exists?username=RANDOM`)
         .send()
         .expect(200, 'false')
     )
 
+    test('Check used username', () =>
+      request().get(`/users/exists?username=${username}`)
+        .send()
+        .expect(200, 'true')
+    )
+
     test('Check missing parameter', () =>
-      request().get(`/register/check`)
+      request().get(`/users/exists`)
         .send()
         .expect(400, 'Missing query parameters: username')
     )
