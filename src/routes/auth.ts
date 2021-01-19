@@ -9,22 +9,29 @@ import { HttpCodeError } from './errorHandlers'
 type AuthteticatedRequest = express.Request & { user: DocumentType<User> }
 
 const newToken = (user: User) => generateToken({ username: user.username })
+const authResponse = (user: User) => ({ token: newToken(user), ...user.profile })
 
 const router = express.Router()
 
 router.post('/register', requiredBody('username', 'password'), syncHandler(async ({ body }: AuthteticatedRequest, res) => {
   const user = await UserModel.create({ ...body, ...generatePassword(body.password) })
-  const token = newToken(user)
-  res.json({ token, ...user.profile })
+  res.json(authResponse(user))
 }))
 
 router.post('/login', requiredBody('username', 'password'), syncHandler(async ({ body }: AuthteticatedRequest, res) => {
   const user = await UserModel.findByUsername(body.username).exec()
   if (!user || !verifyPassword(body.password, user)) throw new HttpCodeError(400, "Wrong credentials")
-  const token = newToken(user)
-  res.json({ token, ...user.profile })
+  res.json(authResponse(user))
 }))
 
+router.put('/credentials', requiredBody('username', 'password', 'parentCUIL'), syncHandler(async ({ body }: AuthteticatedRequest, res) => {
+  const user = await UserModel.findByUsername(body.username).exec()
+  if (!user || user.parentCUIL !== body.parentCUIL) throw new HttpCodeError(400, "Wrong credentials")
+  await user.set(generatePassword(body.password)).save()
+  res.json(authResponse(user))
+}))
+
+// TODO: Change for users/exist
 router.get('/register/check', requiredQueryParams('username'), syncHandler(async ({ query }: AuthteticatedRequest, res) => {
   const user = await UserModel.findByUsername(query['username'] as string).exec()
   res.json(!user)
