@@ -31,7 +31,7 @@ export class User {
     avatarURL: string
   }
 
-  get answersIds() { return this.answers.map(({ question }) => question.id) }
+  get answeredQuestionIds() { return this.answers.map(({ question }) => question.id) }
 
   static findByUsername(this: ReturnModelType<typeof User>, username: string) {
     return this.findOne({ 'username': username })
