@@ -8,107 +8,133 @@ describeApi('Users', (request) => {
     await request().post('/register').send(userJson)
   })
 
-  test('Register', () =>
-    request().post('/register')
-      .send({ ...userJson, username: 'RANDOM', profile: { nickName: 'NICK' } })
-      .expect(200)
-      .then(matchBody({ nickName: 'NICK' }))
-      .then(hasBodyProperty('token'))
-  )
+  describe('POST /register', () => {
+    test('Do register', () =>
+      request().post('/register')
+        .send({ ...userJson, username: 'RANDOM', profile: { nickName: 'NICK' } })
+        .expect(200)
+        .then(matchBody({ nickName: 'NICK' }))
+        .then(hasBodyProperty('token'))
+    )
 
-  test('Register fails for required attributes', () =>
-    request().post('/register')
-      .send({ username, password })
-      .expect(400, 'Path `parentCUIL` is required.\nPath `parentName` is required.')
-  )
+    test('Register fails for required attributes', () =>
+      request().post('/register')
+        .send({ username, password })
+        .expect(400, 'Path `parentCUIL` is required.\nPath `parentName` is required.')
+    )
 
-  // SKIP: Not working in testing enviroment
-  test.skip('Register existing username', () =>
-    request().post('/register')
-      .send(userJson)
-      .expect(400, 'Duplicate key error.')
-  )
-
-
-  test('Login', () =>
-    request().post('/login')
-      .send({ username, password })
-      .expect(200)
-      .then(matchBody({ nickName: userJson.profile.nickName }))
-      .then(hasBodyProperty('token'))
-  )
-
-  test('Login wrong credentials', () =>
-    request().post('/login')
-      .send({ username: 'NOT_EXIST', password: 'WRONG' })
-      .expect(400, 'Wrong credentials')
-  )
-
-  test('Login missing params', () =>
-    request().post('/login')
-      .send({})
-      .expect(400, 'Missing body parameters: username, password')
-  )
+    // SKIP: Not working in testing enviroment
+    test.skip('Register existing username', () =>
+      request().post('/register')
+        .send(userJson)
+        .expect(400, 'Duplicate key error.')
+    )
+  })
 
 
-  test('Profile', () =>
-    request().get(`/profile?access_token=${token}`)
-      .send()
-      .expect(200)
-      .then(matchBody(userJson.profile))
-  )
+  describe('POST /login', () => {
+    test('Do login', () =>
+      request().post('/login')
+        .send({ username, password })
+        .expect(200)
+        .then(matchBody({ nickName: userJson.profile.nickName }))
+        .then(hasBodyProperty('token'))
+    )
 
-  test('Profile missing access token', () =>
-    request().get(`/profile`)
-      .send()
-      .expect(400, 'Missing access token')
-  )
+    test('Login wrong credentials', () =>
+      request().post('/login')
+        .send({ username: 'NOT_EXIST', password: 'WRONG' })
+        .expect(400, 'Wrong credentials')
+    )
 
-  test('Profile unauthorized', () =>
-    request().get(`/profile?access_token=FAKE`)
-      .send()
-      .expect(401, 'Unauthorized')
-  )
+    test('Login missing params', () =>
+      request().post('/login')
+        .send({})
+        .expect(400, 'Missing body parameters: username, password')
+    )
+  })
 
 
-  test('Check new username', () =>
-    request().get(`/register/check?username=RANDOM`)
-      .send()
-      .expect(200, 'true')
-  )
+  describe('PUT /credentials', () => {
+    test('Change credentials', async () => {
+      await request().put('/credentials')
+        .send({ username, parentCUIL, password: "NEW PASSWORD" })
+        .expect(200)
+        .then(hasBodyProperty('token'))
 
-  test('Check used username', () =>
-    request().get(`/register/check?username=${username}`)
-      .send()
-      .expect(200, 'false')
-  )
+      await request().post('/login')
+        .send({ username, password: "NEW PASSWORD" })
+        .expect(200)
+    })
 
-  test('Check missing parameter', () =>
-    request().get(`/register/check`)
-      .send()
-      .expect(400, 'Missing query parameters: username')
-  )
+    test('Change credentials fails', () =>
+      request().put('/credentials')
+        .send({ username, parentCUIL: 'WRONG', password })
+        .expect(400, 'Wrong credentials')
+    )
+  })
 
-  test('Answers', () =>
+
+  describe('GET /profile', () => {
+    test('Profile', () =>
+      request().get(`/profile?access_token=${token}`)
+        .send()
+        .expect(200)
+        .then(matchBody(userJson.profile))
+    )
+
+    test('Profile missing access token', () =>
+      request().get(`/profile`)
+        .send()
+        .expect(400, 'Missing access token')
+    )
+
+    test('Profile unauthorized', () =>
+      request().get(`/profile?access_token=FAKE`)
+        .send()
+        .expect(401, 'Unauthorized')
+    )
+  })
+
+
+  describe('GET /users/exists', () => {
+    test('Check new username', () =>
+      request().get(`/users/exists?username=RANDOM`)
+        .send()
+        .expect(200, 'false')
+    )
+
+    test('Check used username', () =>
+      request().get(`/users/exists?username=${username}`)
+        .send()
+        .expect(200, 'true')
+    )
+
+    test('Check missing parameter', () =>
+      request().get(`/users/exists`)
+        .send()
+        .expect(400, 'Missing query parameters: username')
+    )
+  })
+
+  test('POST /answers', () =>
     request().post(`/answers?access_token=${token}`)
       .send({ question: { id: 1 }, response: { text: "RESPONSE" } })
       .expect(200)
       .then(matchBody({ answeredQuestionIds: [1] }))
   )
-
 })
 
 
 const username = 'USERNAME'
 const password = 'PASSWORD'
+const parentCUIL = 'CUIL'
 
 const userJson = {
-
   username,
   password,
   parentName: 'string',
-  parentCUIL: 'string',
-
+  parentCUIL,
   profile: {
     nickName: username,
     avatarURL: 'string'

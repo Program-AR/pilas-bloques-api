@@ -25,9 +25,16 @@ router.post('/login', requiredBody('username', 'password'), syncHandler(async ({
   res.json(toJsonUser(user))
 }))
 
-router.get('/register/check', requiredQueryParams('username'), syncHandler(async ({ query }: AuthteticatedRequest, res) => {
+router.put('/credentials', requiredBody('username', 'password', 'parentCUIL'), syncHandler(async ({ body }: AuthteticatedRequest, res) => {
+  const user = await UserModel.findByUsername(body.username).exec()
+  if (!user || user.parentCUIL !== body.parentCUIL) throw new HttpCodeError(400, "Wrong credentials")
+  await user.set(generatePassword(body.password)).save()
+  res.json(toJsonUser(user))
+}))
+
+router.get('/users/exists', requiredQueryParams('username'), syncHandler(async ({ query }: AuthteticatedRequest, res) => {
   const user = await UserModel.findByUsername(query['username'] as string).exec()
-  res.json(!user)
+  res.json(Boolean(user))
 }))
 
 
