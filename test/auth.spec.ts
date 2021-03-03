@@ -70,7 +70,7 @@ describeApi('Users', (request) => {
       .expect(401, 'Unauthorized')
   )
 
-  
+
   test('Check new username', () =>
     request().get(`/register/check?username=RANDOM`)
       .send()
@@ -87,6 +87,13 @@ describeApi('Users', (request) => {
     request().get(`/register/check`)
       .send()
       .expect(400, 'Missing query parameters: username')
+  )
+
+  test('Answers', () =>
+    request().post(`/answers?access_token=${token}`)
+      .send({ question: { id: 1 }, response: { text: "RESPONSE" } })
+      .expect(200)
+      .then(matchBody({ answeredQuestionIds: [1] }))
   )
 
 })
