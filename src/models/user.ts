@@ -1,4 +1,12 @@
 import { prop, getModelForClass, ReturnModelType, Severity, modelOptions } from '@typegoose/typegoose'
+import { Schema } from 'mongoose'
+
+class Answer {
+  @prop()
+  question: Schema.Types.Mixed & { id: any }
+  @prop()
+  response: Schema.Types.Mixed
+}
 
 @modelOptions({ options: { allowMixed: Severity.ALLOW } })
 export class User {
@@ -14,6 +22,8 @@ export class User {
   parentCUIL: string
   @prop()
   email: string
+  @prop({ _id: false, type: Answer })
+  answers: Answer[]
 
   @prop({ _id: false })
   profile: {
@@ -21,10 +31,11 @@ export class User {
     avatarURL: string
   }
 
+  get answeredQuestionIds() { return this.answers.map(({ question }) => question.id) }
+
   static findByUsername(this: ReturnModelType<typeof User>, username: string) {
     return this.findOne({ 'username': username })
   }
 }
-
 
 export default getModelForClass<typeof User>(User)

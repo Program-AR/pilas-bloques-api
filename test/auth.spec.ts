@@ -116,6 +116,13 @@ describeApi('Users', (request) => {
         .expect(400, 'Missing query parameters: username')
     )
   })
+
+  test('POST /answers', () =>
+    request().post(`/answers?access_token=${token}`)
+      .send({ question: { id: 1 }, response: { text: "RESPONSE" } })
+      .expect(200)
+      .then(matchBody({ answeredQuestionIds: [1] }))
+  )
 })
 
 
