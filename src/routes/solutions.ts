@@ -9,6 +9,13 @@ const mirror = mirrorTo(process.env.PB_ANALYTICS_URI)
 
 router.post('/challenges', mirror, end)
 
+router.get('/challenges/:challengeId/solution', tryy(tokenAuth), onlyIfAuth, syncHandler(async (req: AutheticatedRequest, res) => {
+  const { user } = req
+  const { challengeId } = req.params as any
+  const solution = await SolutionModel.findOne({ challengeId, user }).exec()
+  res.json(solution)
+}))
+
 router.post('/solutions', mirror, tryy(tokenAuth), onlyIfAuth, syncHandler(async (req: AutheticatedRequest, res) => {
   const { user, body } = req
   const { challengeId } = body
