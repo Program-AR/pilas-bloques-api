@@ -9,7 +9,7 @@ const mirror = mirrorTo(process.env.PB_ANALYTICS_URI)
 
 router.post('/challenges', mirror, end)
 
-router.get('/challenges/:challengeId/solution', tryy(tokenAuth), onlyIfAuth, syncHandler(async (req: AutheticatedRequest, res) => {
+router.get('/challenges/:challengeId/solution', tokenAuth, syncHandler(async (req: AutheticatedRequest, res) => {
   const { user } = req
   const { challengeId } = req.params as any
   const solution = await SolutionModel.findOne({ challengeId, user }).exec()
@@ -20,14 +20,15 @@ router.post('/solutions', mirror, tryy(tokenAuth), onlyIfAuth, syncHandler(async
   const { user, body } = req
   const { challengeId } = body
   body.user = user
-  await SolutionModel.updateOne({ challengeId, user }, body, { upsert: true }).exec()
-  res.end()
+  const result = await SolutionModel.updateOne({ challengeId, user }, body, { upsert: true }).exec()
+  res.json(result) // TODO: Retrieve solution?
 }))
 
 router.put('/solutions/:solutionId', mirror, tryy(tokenAuth), onlyIfAuth, syncHandler(async (req: AutheticatedRequest, res) => {
   const { solutionId } = req.params as any
-  await SolutionModel.updateOne({ solutionId }, req.body).exec()
-  res.end()
+  const solution = await SolutionModel.findOne({ solutionId }).exec()
+  await solution.set(req.body).save()
+  res.json(solution)
 }))
 
 export default router

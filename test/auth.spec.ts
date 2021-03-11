@@ -1,12 +1,8 @@
-import { matchBody, hasBodyProperty } from './utils'
-import { generateToken } from '../src/models/auth'
 import describeApi from './describeApi'
+import { matchBody, hasBodyProperty, authenticate } from './utils'
+import { userJson, username, password, parentCUIL } from './sessionMock'
 
 describeApi('Users', (request) => {
-
-  beforeEach(async () => {
-    await request().post('/register').send(userJson)
-  })
 
   describe('POST /register', () => {
     test('Do register', () =>
@@ -77,7 +73,7 @@ describeApi('Users', (request) => {
 
   describe('GET /profile', () => {
     test('Profile', () =>
-      request().get(`/profile?access_token=${token}`)
+      request().get(authenticate(`/profile`))
         .send()
         .expect(200)
         .then(matchBody(userJson.profile))
@@ -118,27 +114,9 @@ describeApi('Users', (request) => {
   })
 
   test('POST /answers', () =>
-    request().post(`/answers?access_token=${token}`)
+    request().post(authenticate(`/answers`))
       .send({ question: { id: 1 }, response: { text: "RESPONSE" } })
       .expect(200)
       .then(matchBody({ answeredQuestionIds: [1] }))
   )
 })
-
-
-const username = 'USERNAME'
-const password = 'PASSWORD'
-const parentCUIL = 'CUIL'
-
-const userJson = {
-  username,
-  password,
-  parentName: 'string',
-  parentCUIL,
-  profile: {
-    nickName: username,
-    avatarURL: 'string'
-  }
-}
-
-const token = generateToken({ username })

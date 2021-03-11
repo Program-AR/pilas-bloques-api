@@ -10,7 +10,7 @@ export class Solution {
   solutionId: Schema.Types.Mixed
   @prop({ required: true })
   program: string
-  @prop()
+  @prop({ required: true })
   staticAnalysis: Schema.Types.Mixed
   @prop()
   executionResult: Schema.Types.Mixed

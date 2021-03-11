@@ -1,4 +1,5 @@
-import { createServer, Request, dropDB, disconnectDB } from './utils'
+import { createServer, Request, dropDB, disconnectDB, initFetch } from './utils'
+import { userJson } from './sessionMock'
 
 const describeApi = (name: string, cb: (resquest: () => Request) => void) => {
 
@@ -8,7 +9,11 @@ const describeApi = (name: string, cb: (resquest: () => Request) => void) => {
     beforeAll(async () => {
       request = await createServer()
     })
-    beforeEach(() => dropDB())
+    beforeEach(async () => {
+      initFetch()
+      await dropDB()
+      await request.post('/register').send(userJson)
+    })
     afterAll(() => disconnectDB())
 
     cb(() => request)
