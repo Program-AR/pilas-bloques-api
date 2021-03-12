@@ -9,12 +9,11 @@ jobs:
     - npm run package
     deploy:
       skip_cleanup: true
-      provider: releases        
+      provider: releases
+      token:
+        secure: L6nR/HLPm01iNyQOuVqZ/IWoUmhp5CigbcKV03kIFxiyJTHILJYww+9pMgehDzVf0UP549QTmPtBdXHoLIYVrskWeFne6bCbOFDFgF7gYarLhxrUk/rxi81BlMrr+SYDlwZaWD/1iEyj0py5EuoDIxL3FgRjATKKKGy/zFO7bcBw5vDJrPZbKChwITwBZ8Pe4eNC1eW1RtLQqLS7JoX9oc1LyIUmI3R0t3dK4Q38KyTE+iPH7e4bBDKk6IZoyx2Wc54z15V302kc4uV/f6ROZ7O1qLlNQ8CtXWL8n2KK1m7HDMUiOBc4lLTBU3MN6+rPalZNFYWyCIW1YNuls0F3Yy+t9P+Vl2r7rmwMxiE5JV2+MhqzTPtuOI+UKi7/Vk7aPUQge4mdbONW4NaHqbDOY0n1z06bmHAk+1LT9yVe7kB0eKU/RfcRVqMkcULfl54RmbBjQZB4sDIRKFxoPWwk/ROOpkI0u5jV7R6QyaTWBUsplUCChgIdz4UosdREBh9l1nKVSMRhZ8Fr5d2qAThroLI6snFc0P5vffDRVatHvr1u/i+YuV6wkUDOG5YOcmKNzcu9KnRilgp6/kVYdos5rMzJltU5bRUChdnON3gTXP1e47ufJMuJdWzaVx0QV34zUttCbIAAw9Ir632casltFsemFKwtUQ6BBnrNiw6LtJo=
       file:
       - pilasbloques-api.tar.gz
       on:
         tags: true
         all_branches: true
-deploy:
-  token:
-    secure: L6nR/HLPm01iNyQOuVqZ/IWoUmhp5CigbcKV03kIFxiyJTHILJYww+9pMgehDzVf0UP549QTmPtBdXHoLIYVrskWeFne6bCbOFDFgF7gYarLhxrUk/rxi81BlMrr+SYDlwZaWD/1iEyj0py5EuoDIxL3FgRjATKKKGy/zFO7bcBw5vDJrPZbKChwITwBZ8Pe4eNC1eW1RtLQqLS7JoX9oc1LyIUmI3R0t3dK4Q38KyTE+iPH7e4bBDKk6IZoyx2Wc54z15V302kc4uV/f6ROZ7O1qLlNQ8CtXWL8n2KK1m7HDMUiOBc4lLTBU3MN6+rPalZNFYWyCIW1YNuls0F3Yy+t9P+Vl2r7rmwMxiE5JV2+MhqzTPtuOI+UKi7/Vk7aPUQge4mdbONW4NaHqbDOY0n1z06bmHAk+1LT9yVe7kB0eKU/RfcRVqMkcULfl54RmbBjQZB4sDIRKFxoPWwk/ROOpkI0u5jV7R6QyaTWBUsplUCChgIdz4UosdREBh9l1nKVSMRhZ8Fr5d2qAThroLI6snFc0P5vffDRVatHvr1u/i+YuV6wkUDOG5YOcmKNzcu9KnRilgp6/kVYdos5rMzJltU5bRUChdnON3gTXP1e47ufJMuJdWzaVx0QV34zUttCbIAAw9Ir632casltFsemFKwtUQ6BBnrNiw6LtJo=
