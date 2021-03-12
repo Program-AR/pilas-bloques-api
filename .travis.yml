@@ -9,11 +9,12 @@ jobs:
     - npm run package
     deploy:
       skip_cleanup: true
-      provider: releases
-      token:
-        secure: Y36o8zYMmuEeiE0Ycfeay6AuH9UfjWg0YuYWV7VcviH9Wvpp20x+MuiOYqIgdP35AM7Pw0qnjO100UjPhcWAzqZsGo23nOX41LGSUvlm87P/RNK4NOcvBvUxON2effgF8X1ue+oqJd1vPMVQ7wi0rV6GtkeEEzYJ1xGpiEMvI4Ynd0bemSVLRHXn2tol0f8XWoBlfWi8nyNS72Fp4Xk0Jy1WhXd7mypmlDwj3c8FRgDAcMwjK8rLUAFjiYKjkS5gir2qZAWGUGCPkJai/4s4LWBvenaVM2zpV4i3Uf3hZcznwC12ZXs+sB1Pn5VwnXI5lrbX6MsUVH6dnd6nqYqeA9UCfPqwB35KVU72Lll14RgxmYiru2/3th7sM4qkEPn9ZEKmZmXukoEYu6igBPnVCpre7nzZaw2oq23GYwMKTreq2EMQFFO1hTuXyp7Aqu8Qy52lU2ia72c6AU7TXxHuCsaD3Pnd85ztTJXwyXKrZ7CYnBmkQ9p1h1f9MrdICHxel1amgea1yI/xhLYCZoJR3upS30R2hn2mYeVVvFpDzIiFuAPTf/UC60kjvKfFB9PZ5UM7xvV4zSTg1Z+bqZLATxLsb4sSp2seG7bMG2+kXkRFYAFqmj5fnxoziIBzZFvfVXGNRfhWswPok77z7LC21HV0PGy5edYwwuaA8juup+8=
+      provider: releases        
       file:
       - pilasbloques-api.tar.gz
       on:
         tags: true
         all_branches: true
+deploy:
+  token:
+    secure: L6nR/HLPm01iNyQOuVqZ/IWoUmhp5CigbcKV03kIFxiyJTHILJYww+9pMgehDzVf0UP549QTmPtBdXHoLIYVrskWeFne6bCbOFDFgF7gYarLhxrUk/rxi81BlMrr+SYDlwZaWD/1iEyj0py5EuoDIxL3FgRjATKKKGy/zFO7bcBw5vDJrPZbKChwITwBZ8Pe4eNC1eW1RtLQqLS7JoX9oc1LyIUmI3R0t3dK4Q38KyTE+iPH7e4bBDKk6IZoyx2Wc54z15V302kc4uV/f6ROZ7O1qLlNQ8CtXWL8n2KK1m7HDMUiOBc4lLTBU3MN6+rPalZNFYWyCIW1YNuls0F3Yy+t9P+Vl2r7rmwMxiE5JV2+MhqzTPtuOI+UKi7/Vk7aPUQge4mdbONW4NaHqbDOY0n1z06bmHAk+1LT9yVe7kB0eKU/RfcRVqMkcULfl54RmbBjQZB4sDIRKFxoPWwk/ROOpkI0u5jV7R6QyaTWBUsplUCChgIdz4UosdREBh9l1nKVSMRhZ8Fr5d2qAThroLI6snFc0P5vffDRVatHvr1u/i+YuV6wkUDOG5YOcmKNzcu9KnRilgp6/kVYdos5rMzJltU5bRUChdnON3gTXP1e47ufJMuJdWzaVx0QV34zUttCbIAAw9Ir632casltFsemFKwtUQ6BBnrNiw6LtJo=
