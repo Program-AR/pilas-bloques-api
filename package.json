@@ -7,7 +7,10 @@
     "build": "tsc",
     "lint": "eslint .",
     "start": "node dist/src/index.js",
-    "test": "DOTENV_CONFIG_PATH=.env.test jest --setupFiles dotenv/config --colors --testPathIgnorePatterns dist --testTimeout 5000 --runInBand"
+    "test": "DOTENV_CONFIG_PATH=.env.test jest --setupFiles dotenv/config --colors --testPathIgnorePatterns dist --testTimeout 5000 --runInBand",
+    "release": "release patch",
+    "prepackage": "npm run build && cp -R node_modules dist/",
+    "package": "tar -czvf pilasbloques-api.tar.gz dist/*"
   },
   "author": "Fundación Sadosky",
   "license": "ISC",
@@ -39,7 +42,8 @@
     "nodemon": "^2.0.4",
     "supertest": "^4.0.2",
     "ts-jest": "^26.3.0",
-    "typescript": "^4.0.2"
+    "typescript": "^4.0.2",
+    "release": "^6.3.0"
   },
   "jest": {
     "preset": "ts-jest",

@@ -3,6 +3,8 @@
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true,
       "allowJs": true,
-      "target": "es5"
-  }
+      "target": "es5",
+      "outDir": "dist"
+  },
+  "exclude": ["test"]
 }
