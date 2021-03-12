@@ -9,9 +9,9 @@ jobs:
     - npm run package
     deploy:
       skip_cleanup: true
-      provider: releases # When there is a tag, pack api and upload tar.gz.
+      provider: releases
       token:
-        secure: TzC1MbuGz1AKSxzrDMWHqfd+S3XmUERZfmfa0G+RX7CMJwD85c4LAorYN4lAsdT7LEi1BfRvDT7ceSf5+YQi8CvMjAUzjhHMtGFoKCIscUkcwC/X20Y80S64vwIBNX0q5in9CMR6f5OV9v+UIswKUwZ4uKRWGQFmhy8/nsQ64FNDlwhRhROPjNZSME44iYLLErICGjNdG0j4G5uLjSPbDMqRqtnXuCQfcYVkX9fMBvLY27BROfgW2eaMCIYF4RbL0f0ftizQkgnqifpCVQUDcPLOjAJ2eOPrFKqJyWrdIhRpmyo2g2DexAdMeXC9VzDX38hFmFDiyJBpFEbXRBYfG/S/WclpKdjAH6Ml4QiAVz86ck7Ku7tzZ4x7NfRBm1R3CuIvFWesYYQ8XuL1inQSDoQMGfw46J+uCJIRBAh7loZwjvY59sNamLgzpAFcYhz6eJbguMMtPTQCqO2UkNm3UarqbOQX7EtyGyNixyUpJA6mBJ1d6gT7F0vABiruk3WB6xpm3beFKdPCJ90wqoUGzpKaEMgc1EWu+xc/LFlFyZfWSYVp/2Qclnt9vYoQVYZs8ywqer3H8K5aF6fDfs+4ntX40BOeiWXt6NFxeHQp3LavVw05vGFJvjYgTt3hLdwf/IQJR5GqQ2bLUwNeRp4LH+m2gRvr1hpwJjfw7OvguBE=
+        secure: Y36o8zYMmuEeiE0Ycfeay6AuH9UfjWg0YuYWV7VcviH9Wvpp20x+MuiOYqIgdP35AM7Pw0qnjO100UjPhcWAzqZsGo23nOX41LGSUvlm87P/RNK4NOcvBvUxON2effgF8X1ue+oqJd1vPMVQ7wi0rV6GtkeEEzYJ1xGpiEMvI4Ynd0bemSVLRHXn2tol0f8XWoBlfWi8nyNS72Fp4Xk0Jy1WhXd7mypmlDwj3c8FRgDAcMwjK8rLUAFjiYKjkS5gir2qZAWGUGCPkJai/4s4LWBvenaVM2zpV4i3Uf3hZcznwC12ZXs+sB1Pn5VwnXI5lrbX6MsUVH6dnd6nqYqeA9UCfPqwB35KVU72Lll14RgxmYiru2/3th7sM4qkEPn9ZEKmZmXukoEYu6igBPnVCpre7nzZaw2oq23GYwMKTreq2EMQFFO1hTuXyp7Aqu8Qy52lU2ia72c6AU7TXxHuCsaD3Pnd85ztTJXwyXKrZ7CYnBmkQ9p1h1f9MrdICHxel1amgea1yI/xhLYCZoJR3upS30R2hn2mYeVVvFpDzIiFuAPTf/UC60kjvKfFB9PZ5UM7xvV4zSTg1Z+bqZLATxLsb4sSp2seG7bMG2+kXkRFYAFqmj5fnxoziIBzZFvfVXGNRfhWswPok77z7LC21HV0PGy5edYwwuaA8juup+8=
       file:
       - pilasbloques-api.tar.gz
       on:
