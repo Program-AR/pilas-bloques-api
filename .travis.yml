@@ -3,6 +3,8 @@ node_js: node
 services: mongodb
 jobs:
   include:
+  - stage: Test
+     script: npm test
   - stage: Package release
     if: tag IS present
     before_deploy:
