@@ -10,7 +10,7 @@ type AuthteticatedRequest = express.Request & { user: DocumentType<User> }
 
 const newToken = (user: User) => generateToken({ id: user._id })
 
-const toJsonUser = (user: User) => ({ token: newToken(user), ...user.profile, answeredQuestionIds: user.answeredQuestionIds })
+const toJsonUser = (user: User) => ({ id: user._id, token: newToken(user), ...user.profile, answeredQuestionIds: user.answeredQuestionIds })
 
 const router = express.Router()
 
