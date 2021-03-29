@@ -21,7 +21,7 @@ export const verifyPassword = (password: string, { salt, hashedPassword }: Encod
 
 
 type TokenData = {
-  username: string
+  id: string
 }
 
 const secret = process.env.JWT_SECRET || 'test'

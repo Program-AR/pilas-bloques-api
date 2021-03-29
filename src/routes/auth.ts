@@ -8,7 +8,7 @@ import { HttpCodeError } from './errorHandlers'
 
 type AuthteticatedRequest = express.Request & { user: DocumentType<User> }
 
-const newToken = (user: User) => generateToken({ username: user.username })
+const newToken = (user: User) => generateToken({ id: user._id })
 
 const toJsonUser = (user: User) => ({ token: newToken(user), ...user.profile, answeredQuestionIds: user.answeredQuestionIds })
 

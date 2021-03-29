@@ -8,8 +8,8 @@ import { NotFound, ParametersNotFound, Unauthorized } from './errorHandlers'
 export type AutheticatedRequest = express.Request & { user: DocumentType<User> }
 
 export const tokenAuth = syncHandler(async (req: AutheticatedRequest, _res, next) => {
-  const { username } = parseToken(accessToken(req))
-  const user = await UserModel.findByUsername(username).exec()
+  const { id } = parseToken(accessToken(req))
+  const user = await UserModel.findById(id).exec()
   if (!user) throw new Unauthorized()
   req.user = user
   next()
