@@ -1,11 +1,12 @@
 import { matchBody, hasBodyProperty } from './utils'
-import { generateToken } from '../src/models/auth'
 import describeApi from './describeApi'
 
 describeApi('Users', (request) => {
+  let token
 
   beforeEach(async () => {
-    await request().post('/register').send(userJson)
+    const { body } = await request().post('/register').send(userJson)
+    token = body.token
   })
 
   describe('POST /register', () => {
@@ -14,7 +15,9 @@ describeApi('Users', (request) => {
         .send({ ...userJson, username: 'RANDOM', profile: { nickName: 'NICK' } })
         .expect(200)
         .then(matchBody({ nickName: 'NICK' }))
+        .then(hasBodyProperty('id'))
         .then(hasBodyProperty('token'))
+        .then(hasBodyProperty('answeredQuestionIds'))
     )
 
     test('Register fails for required attributes', () =>
@@ -38,7 +41,9 @@ describeApi('Users', (request) => {
         .send({ username, password })
         .expect(200)
         .then(matchBody({ nickName: userJson.profile.nickName }))
+        .then(hasBodyProperty('id'))
         .then(hasBodyProperty('token'))
+        .then(hasBodyProperty('answeredQuestionIds'))
     )
 
     test('Login wrong credentials', () =>
@@ -140,5 +145,3 @@ const userJson = {
     avatarURL: 'string'
   }
 }
-
-const token = generateToken({ username })
