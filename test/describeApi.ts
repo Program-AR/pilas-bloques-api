@@ -1,17 +1,25 @@
-import { createServer, Request, dropDB, disconnectDB } from './utils'
+import { createServer, Request, dropDB, disconnectDB, initFetch, authenticate } from './utils'
+import { userJson } from './sessionMock'
 
-const describeApi = (name: string, cb: (resquest: () => Request) => void) => {
+const describeApi = (name: string, cb: (resquest: () => Request, authenticated: (uri: string) => string) => void) => {
 
   describe(name, () => {
     let request: Request
+    let token: string
+    const authenticated = (uri: string) => authenticate(uri, token)
 
     beforeAll(async () => {
       request = await createServer()
     })
-    beforeEach(() => dropDB())
+    beforeEach(async () => {
+      initFetch()
+      await dropDB()
+      const { body } = await request.post('/register').send(userJson)
+      token = body.token
+    })
     afterAll(() => disconnectDB())
 
-    cb(() => request)
+    cb(() => request, authenticated)
   })
 
 }

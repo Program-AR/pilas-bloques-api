@@ -5,8 +5,10 @@ import * as fetchMock from 'fetch-mock'
 import router from '../src/routes'
 import { connectDB } from '../src/persistence/db'
 
-export type Request = Request.SuperTest<Request.Test>
+const analytics = process.env.PB_ANALYTICS_URI
 
+// SERVER
+export type Request = Request.SuperTest<Request.Test>
 export const createServer = async () => {
   await connectDB()
   await dropDB()
@@ -15,11 +17,21 @@ export const createServer = async () => {
   return Request(app)
 }
 
+// DB
 export const dropDB = () => mongoose.connection.dropDatabase()
 export const disconnectDB = () => mongoose.disconnect()
-
 export const flushDB = () => {
   mongoose.modelNames().forEach(model => mongoose.deleteModel(model))
+}
+
+// URI
+export const authenticate = (uri: string, token: string) => `${uri}?access_token=${token}`
+
+// FETCH
+export const initFetch = () => {
+  fetchMock.reset()
+  fetchMock.config.overwriteRoutes = true
+  fetchMock.mock(`begin:${analytics}`, 200)
 }
 
 // EXPECTATIONS
