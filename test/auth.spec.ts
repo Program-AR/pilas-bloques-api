@@ -1,8 +1,8 @@
 import describeApi from './describeApi'
-import { matchBody, hasBodyProperty, authenticate } from './utils'
+import { matchBody, hasBodyProperty } from './utils'
 import { userJson, username, password, parentCUIL } from './sessionMock'
 
-describeApi('Users', (request) => {
+describeApi('Users', (request, authenticated) => {
 
   describe('POST /register', () => {
     test('Do register', () =>
@@ -10,7 +10,9 @@ describeApi('Users', (request) => {
         .send({ ...userJson, username: 'RANDOM', profile: { nickName: 'NICK' } })
         .expect(200)
         .then(matchBody({ nickName: 'NICK' }))
+        .then(hasBodyProperty('id'))
         .then(hasBodyProperty('token'))
+        .then(hasBodyProperty('answeredQuestionIds'))
     )
 
     test('Register fails for required attributes', () =>
@@ -34,7 +36,9 @@ describeApi('Users', (request) => {
         .send({ username, password })
         .expect(200)
         .then(matchBody({ nickName: userJson.profile.nickName }))
+        .then(hasBodyProperty('id'))
         .then(hasBodyProperty('token'))
+        .then(hasBodyProperty('answeredQuestionIds'))
     )
 
     test('Login wrong credentials', () =>
@@ -73,7 +77,7 @@ describeApi('Users', (request) => {
 
   describe('GET /profile', () => {
     test('Profile', () =>
-      request().get(authenticate(`/profile`))
+      request().get(authenticated(`/profile`))
         .send()
         .expect(200)
         .then(matchBody(userJson.profile))
@@ -114,7 +118,7 @@ describeApi('Users', (request) => {
   })
 
   test('POST /answers', () =>
-    request().post(authenticate(`/answers`))
+    request().post(authenticated(`/answers`))
       .send({ question: { id: 1 }, response: { text: "RESPONSE" } })
       .expect(200)
       .then(matchBody({ answeredQuestionIds: [1] }))

@@ -1,4 +1,5 @@
 import { prop, getModelForClass, ReturnModelType, Severity, modelOptions } from '@typegoose/typegoose'
+import { Base } from '@typegoose/typegoose/lib/defaultClasses'
 import { Schema } from 'mongoose'
 
 class Answer {
@@ -9,7 +10,7 @@ class Answer {
 }
 
 @modelOptions({ options: { allowMixed: Severity.ALLOW } })
-export class User {
+export class User extends Base<string> {
   @prop({ required: true, index: true, unique: true })
   username: string
   @prop({ required: true })

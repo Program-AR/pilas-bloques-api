@@ -1,9 +1,9 @@
 import describeApi from './describeApi'
-import { fetchCalled, fetchBodyMatch, hasBodyProperty, authenticate, matchBody } from './utils'
+import { fetchCalled, fetchBodyMatch, hasBodyProperty, matchBody } from './utils'
 
 const analytics = process.env.PB_ANALYTICS_URI
 
-describeApi('Solutions', (request) => {
+describeApi('Solutions', (request, authenticated) => {
 
   describe('Analytics mirroring', () => {
     analyticsTest('/challenges')
@@ -26,15 +26,15 @@ describeApi('Solutions', (request) => {
     describe('POST /solutions', () => {
 
       test('should create new last challenges solution', () =>
-        request().post(authenticate('/solutions'))
+        request().post(authenticated('/solutions'))
           .send(solutionJson)
           .expect(200)
           .then(hasBodyProperty('upserted'))
       )
 
       test('should update last challenges solution', async () => {
-        await request().post(authenticate('/solutions')).send(solutionJson).expect(200)
-        await request().post(authenticate('/solutions'))
+        await request().post(authenticated('/solutions')).send(solutionJson).expect(200)
+        await request().post(authenticated('/solutions'))
           .send({ ...solutionJson, solutionId: '11111' })
           .expect(200)
           .then(matchBody({ "nModified": 1 }))
@@ -50,10 +50,10 @@ describeApi('Solutions', (request) => {
 
     describe('PUT /solutions/:id', () => {
 
-      beforeEach(() => request().post(authenticate('/solutions')).send(solutionJson))
+      beforeEach(() => request().post(authenticated('/solutions')).send(solutionJson))
 
       test('should update existing solution', () =>
-        request().put(authenticate(`/solutions/${solutionId}`))
+        request().put(authenticated(`/solutions/${solutionId}`))
           .send(executionJson)
           .expect(200)
           .then(matchBody(executionJson))
@@ -70,16 +70,16 @@ describeApi('Solutions', (request) => {
 
     describe('GET /challenges/:id/solution', () => {
 
-      beforeEach(() => request().post(authenticate('/solutions')).send(solutionJson))
+      beforeEach(() => request().post(authenticated('/solutions')).send(solutionJson))
 
       test('should retrieve last challenges solution', () =>
-        request().get(authenticate(`/challenges/${challengeId}/solution`))
+        request().get(authenticated(`/challenges/${challengeId}/solution`))
           .expect(200)
           .then(matchBody(solutionJson))
       )
 
       test('should retrieve null for not existing challenges solution', () =>
-        request().get(authenticate(`/challenges/12345/solution`))
+        request().get(authenticated(`/challenges/12345/solution`))
           .expect(200, null)
       )
 

@@ -4,7 +4,6 @@ import * as mongoose from 'mongoose'
 import * as fetchMock from 'fetch-mock'
 import router from '../src/routes'
 import { connectDB } from '../src/persistence/db'
-import { token } from './sessionMock'
 
 const analytics = process.env.PB_ANALYTICS_URI
 
@@ -26,7 +25,7 @@ export const flushDB = () => {
 }
 
 // URI
-export const authenticate = (uri: string) => `${uri}?access_token=${token}`
+export const authenticate = (uri: string, token: string) => `${uri}?access_token=${token}`
 
 // FETCH
 export const initFetch = () => {

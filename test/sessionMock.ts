@@ -1,5 +1,3 @@
-import { generateToken } from '../src/models/auth'
-
 export const username = 'USERNAME'
 export const password = 'PASSWORD'
 export const parentCUIL = 'CUIL'
@@ -14,5 +12,3 @@ export const userJson = {
     avatarURL: 'string'
   }
 }
-
-export const token = generateToken({ username })
