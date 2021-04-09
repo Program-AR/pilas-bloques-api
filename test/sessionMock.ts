@@ -1,12 +1,12 @@
 export const username = 'USERNAME'
 export const password = 'PASSWORD'
-export const parentCUIL = 'CUIL'
+export const parentDNI = 'DNI'
 
 export const userJson = {
   username,
   password,
   parentName: 'string',
-  parentCUIL,
+  parentDNI,
   profile: {
     nickName: username,
     avatarURL: 'string'
