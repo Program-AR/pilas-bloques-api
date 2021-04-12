@@ -22,7 +22,7 @@ export class User extends Base<string> {
   @prop({ required: true })
   parentCUIL: string
   @prop()
-  email: string
+  email?: string
   @prop({ _id: false, type: Answer })
   answers: Answer[]
 

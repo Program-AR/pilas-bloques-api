@@ -32,11 +32,17 @@ router.put('/credentials', requiredBody('username', 'password', 'parentCUIL'), s
   res.json(toJsonUser(user))
 }))
 
-router.get('/users/exists', requiredQueryParams('username'), syncHandler(async ({ query }: AuthteticatedRequest, res) => {
+router.post('/password-recovery', requiredQueryParams('username'), syncHandler(async ({ query }: AuthteticatedRequest, res) => {
   const user = await UserModel.findByUsername(query['username'] as string).exec()
-  res.json(Boolean(user))
+  if (!user) throw new HttpCodeError(404, "User does not exist")
+  if (user.email) sendPasswordRecoveryMail(user)
+  res.json({ email: user.email ? ofuscate(user.email) : null })
 }))
 
+const sendPasswordRecoveryMail = (user: User) => {
+  console.log("TOKEN", newToken(user))  // TODO
+ }
+const ofuscate = (email: string) => email // TODO
 
 router.post('/answers', tokenAuth, requiredBody('question', 'response'), syncHandler(async ({ user, body }: AuthteticatedRequest, res) => {
   user.answers.push(body)
