@@ -52,4 +52,9 @@ router.get('/profile', tokenAuth, syncHandler(async ({ user }: AuthteticatedRequ
   res.json(user.profile)
 }))
 
+router.get('/users/exists', requiredQueryParams('username'), syncHandler(async ({ query }: AuthteticatedRequest, res) => {
+  const user = await UserModel.findByUsername(query['username'] as string).exec()
+  res.json(Boolean(user))
+}))
+
 export default router
