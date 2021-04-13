@@ -1,7 +1,12 @@
 import { createServer, Request, dropDB, disconnectDB, initFetch, authenticate } from './utils'
 import { userJson } from './sessionMock'
 
-const describeApi = (name: string, cb: (resquest: () => Request, authenticated: (uri: string) => string) => void) => {
+type AuthUtils = {
+  token: () => string
+  authenticated: (uri: string) => string
+}
+
+const describeApi = (name: string, cb: (resquest: () => Request, authUtils: AuthUtils) => void) => {
 
   describe(name, () => {
     let request: Request
@@ -19,7 +24,7 @@ const describeApi = (name: string, cb: (resquest: () => Request, authenticated: 
     })
     afterAll(() => disconnectDB())
 
-    cb(() => request, authenticated)
+    cb(() => request, { authenticated, token: () => token })
   })
 
 }

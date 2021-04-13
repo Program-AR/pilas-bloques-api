@@ -1,8 +1,8 @@
 import describeApi from './describeApi'
 import { matchBody, hasBodyProperty } from './utils'
-import { userJson, username, password, parentCUIL } from './sessionMock'
+import { userJson, username, password, parentCUIL } from './sessionMock';
 
-describeApi('Users', (request, authenticated) => {
+describeApi('Users', (request, { authenticated, token }) => {
 
   describe('POST /register', () => {
     test('Do register', () =>
@@ -56,9 +56,20 @@ describeApi('Users', (request, authenticated) => {
 
 
   describe('PUT /credentials', () => {
-    test('Change credentials', async () => {
+    test('Change credentials by parent CUIL', async () => {
       await request().put('/credentials')
         .send({ username, parentCUIL, password: "NEW PASSWORD" })
+        .expect(200)
+        .then(hasBodyProperty('token'))
+
+      await request().post('/login')
+        .send({ username, password: "NEW PASSWORD" })
+        .expect(200)
+    })
+
+    test('Change credentials by token', async () => {
+      await request().put('/credentials')
+        .send({ token: token(), password: "NEW PASSWORD" })
         .expect(200)
         .then(hasBodyProperty('token'))
 
@@ -72,6 +83,34 @@ describeApi('Users', (request, authenticated) => {
         .send({ username, parentCUIL: 'WRONG', password })
         .expect(400, 'Wrong credentials')
     )
+
+    test('Missing auth info', () =>
+      request().put('/credentials')
+        .send({ username, password })
+        .expect(400, 'Missing body parameters: parentCUIL')
+    )
+  })
+
+  describe('POST /password-recovery', () => {
+
+    test('Send email', async () => {
+      await request().post('/register').send({ ...userJson, username: 'TEST', email: 'lita.sadosky@program.ar' })
+      await request().post(`/password-recovery?username=TEST`)
+        .expect(200)
+        //TODO: assert email sending
+        .then(matchBody({ email: 'l**********y@program.ar' }))
+    })
+
+    test('Does not send email', async () => {
+      await request().post(`/password-recovery?username=${username}`)
+        .expect(200)
+        .then(matchBody({ email: null }))
+    })
+
+    test('User does not exists', async () => {
+      await request().post(`/password-recovery?username=FAKE`)
+        .expect(404, 'User does not exist')
+    })
   })
 
 

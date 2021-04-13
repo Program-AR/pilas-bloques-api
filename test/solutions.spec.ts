@@ -3,7 +3,7 @@ import { fetchCalled, fetchBodyMatch, hasBodyProperty, matchBody } from './utils
 
 const analytics = process.env.PB_ANALYTICS_URI
 
-describeApi('Solutions', (request, authenticated) => {
+describeApi('Solutions', (request, { authenticated }) => {
 
   describe('Analytics mirroring', () => {
     analyticsTest('/challenges')
