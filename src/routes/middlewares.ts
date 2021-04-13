@@ -3,17 +3,40 @@ import { syncHandler, RequestHandler } from './utils'
 import { DocumentType } from '@typegoose/typegoose'
 import UserModel, { User } from '../models/user'
 import { parseToken } from '../models/auth'
-import { NotFound, ParametersNotFound, Unauthorized } from './errorHandlers'
+import { NotFound, ParametersNotFound, Unauthorized, WrongCredentials } from './errorHandlers'
 
 export type AutheticatedRequest = express.Request & { user: DocumentType<User> }
 
 export const tokenAuth = syncHandler(async (req: AutheticatedRequest, _res, next) => {
-  const { id } = parseToken(accessToken(req))
-  const user = await UserModel.findById(id).exec()
-  if (!user) throw new Unauthorized()
+  req.user = await authByToken(accessToken(req))
+  next()
+})
+
+export const passwordChangeAuth = syncHandler(async (req: AutheticatedRequest, _res, next) => {
+  let user: DocumentType<User>
+  const body = req.body
+  if (body.token) {
+    user = await authByToken(body.token)
+  } else {
+    required(body, 'body', ['username', 'parentCUIL'])
+    user = await authByParentCUIL(body)
+  }
   req.user = user
   next()
 })
+
+const authByToken = async (token: string) => {
+  const { id } = parseToken(token)
+  const user = await UserModel.findById(id).exec()
+  if (!user) throw new Unauthorized()
+  return user
+}
+
+const authByParentCUIL = async (body: { username: string, parentCUIL: string }) => {
+  const user = await UserModel.findByUsername(body.username).exec()
+  if (!user || user.parentCUIL !== body.parentCUIL) throw new WrongCredentials()
+  return user
+}
 
 const accessToken = (req: AutheticatedRequest): string => {
   const token = req.query['access_token'] as string || req.header('authorization')?.replace('Bearer ', '')
@@ -22,18 +45,19 @@ const accessToken = (req: AutheticatedRequest): string => {
 }
 
 export const requiredBody = (...fields: string[]) => syncHandler(async (req: AutheticatedRequest, _res, next) => {
-  required(req.body, 'body', fields, next)
+  required(req.body, 'body', fields)
+  next()
 })
 
 
 export const requiredQueryParams = (...fields: string[]) => syncHandler(async (req: AutheticatedRequest, _res, next) => {
-  required(req.query, 'query', fields, next)
+  required(req.query, 'query', fields)
+  next()
 })
 
-const required = (data: any, label: string, fields: string[], next: express.NextFunction) => {
+const required = (data: any, label: string, fields: string[]) => {
   if (!data) throw (new NotFound(label))
   if (!fields.every(field => data[field])) throw (new ParametersNotFound(label, ...fields.filter(field => !data[field])))
-  next()
 }
 
 export const mirrorTo = (url: string): RequestHandler => (req, _res, next) => {
@@ -56,10 +80,10 @@ export const tryy = (handler: RequestHandler): RequestHandler => (req, _res, nex
   }
 }
 
-export const onlyIfAuth : RequestHandler = (req: AutheticatedRequest, res, next) => {
+export const onlyIfAuth: RequestHandler = (req: AutheticatedRequest, res, next) => {
   if (req.user) { next() } else { res.end() }
 }
 
-export const end : RequestHandler = (req: AutheticatedRequest, res) => {
+export const end: RequestHandler = (req: AutheticatedRequest, res) => {
   res.end()
 }
