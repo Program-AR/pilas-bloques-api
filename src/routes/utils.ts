@@ -9,3 +9,11 @@ export const syncHandler = (handler: RequestHandler): RequestHandler => async (r
     next(err)
   }
 }
+
+export const ofuscate = (email: string) => {
+  const [user, server] = email.split('@')
+  const init = user[0]
+  const last = user.split('').reverse()[0]
+  const ofuscatedCount = user.length - 2
+  return `${init}${'*'.repeat(ofuscatedCount)}${last}@${server}`
+}

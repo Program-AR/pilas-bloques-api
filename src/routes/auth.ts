@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { syncHandler } from './utils'
+import { syncHandler, ofuscate } from './utils'
 import { DocumentType } from '@typegoose/typegoose'
 import UserModel, { User } from '../models/user'
 import { generatePassword, verifyPassword, generateToken } from '../models/auth'
@@ -40,7 +40,6 @@ router.post('/password-recovery', requiredQueryParams('username'), syncHandler(a
 const sendPasswordRecoveryMail = (user: User) => {
   console.log("TOKEN", newToken(user))  // TODO
 }
-const ofuscate = (email: string) => email // TODO
 
 router.post('/answers', tokenAuth, requiredBody('question', 'response'), syncHandler(async ({ user, body }: AuthteticatedRequest, res) => {
   user.answers.push(body)
