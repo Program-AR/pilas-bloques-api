@@ -1,6 +1,6 @@
 import * as express from 'express'
-import { syncHandler } from './utils'
-import { tokenAuth, mirrorTo, tryy, AutheticatedRequest, onlyIfAuth, end } from './middlewares'
+import { syncHandler, AutheticatedRequest } from './utils'
+import { tokenAuth, mirrorTo, tryy, onlyIfAuth, end } from './middlewares'
 import SolutionModel from '../models/solution'
 
 const router = express.Router()

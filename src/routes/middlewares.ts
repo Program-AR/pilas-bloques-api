@@ -1,11 +1,8 @@
-import * as express from 'express'
-import { syncHandler, RequestHandler } from './utils'
+import { syncHandler, RequestHandler, AutheticatedRequest } from './utils'
 import { DocumentType } from '@typegoose/typegoose'
 import UserModel, { User } from '../models/user'
 import { parseToken } from '../models/auth'
 import { NotFound, ParametersNotFound, Unauthorized, WrongCredentials } from './errorHandlers'
-
-export type AutheticatedRequest = express.Request & { user: DocumentType<User> }
 
 export const tokenAuth = syncHandler(async (req: AutheticatedRequest, _res, next) => {
   req.user = await authByToken(accessToken(req))

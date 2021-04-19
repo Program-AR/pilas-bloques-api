@@ -1,5 +1,6 @@
 import * as jwt from 'jsonwebtoken'
 import * as crypto from 'crypto'
+import { User } from './user'
 import { Unauthorized } from '../routes/errorHandlers'
 
 type EncodedPassword = {
@@ -25,6 +26,8 @@ type TokenData = {
 }
 
 const secret = process.env.JWT_SECRET || 'test'
+
+export const newToken = (user: User) => generateToken({ id: user._id })
 
 export const generateToken = (data: TokenData): string => jwt.sign(data, secret)
 

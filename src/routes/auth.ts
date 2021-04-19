@@ -2,13 +2,13 @@ import * as express from 'express'
 import { syncHandler, ofuscate } from './utils'
 import { DocumentType } from '@typegoose/typegoose'
 import UserModel, { User } from '../models/user'
-import { generatePassword, verifyPassword, generateToken } from '../models/auth'
+import { generatePassword, verifyPassword, newToken } from '../models/auth'
 import { tokenAuth, requiredBody, requiredQueryParams, passwordChangeAuth } from './middlewares'
 import { HttpCodeError } from './errorHandlers'
+import { createTransport } from '../mailing'
+import { passwordRecoveryMail } from '../mailing/mails'
 
 type AuthteticatedRequest = express.Request & { user: DocumentType<User> }
-
-const newToken = (user: User) => generateToken({ id: user._id })
 
 const toJsonUser = (user: User) => ({ id: user._id, token: newToken(user), ...user.profile, answeredQuestionIds: user.answeredQuestionIds })
 
@@ -33,13 +33,9 @@ router.put('/credentials', requiredBody('password'), passwordChangeAuth, syncHan
 router.post('/password-recovery', requiredQueryParams('username'), syncHandler(async ({ query }: AuthteticatedRequest, res) => {
   const user = await UserModel.findByUsername(query['username'] as string).exec()
   if (!user) throw new HttpCodeError(404, "User does not exist")
-  if (user.email) sendPasswordRecoveryMail(user)
+  if (user.email) await createTransport().sendMail(passwordRecoveryMail(user))
   res.json({ email: user.email ? ofuscate(user.email) : null })
 }))
-
-const sendPasswordRecoveryMail = (user: User) => {
-  console.log("TOKEN", newToken(user))  // TODO
-}
 
 router.post('/answers', tokenAuth, requiredBody('question', 'response'), syncHandler(async ({ user, body }: AuthteticatedRequest, res) => {
   user.answers.push(body)

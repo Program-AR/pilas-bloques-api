@@ -1,4 +1,9 @@
 import * as express from 'express'
+import * as nodemailer from 'nodemailer'
+import { DocumentType } from '@typegoose/typegoose'
+import { User } from '../models/user'
+
+export type AutheticatedRequest = express.Request & { user: DocumentType<User> } & { transport: nodemailer.Transporter }
 
 export type RequestHandler = express.RequestHandler
 
