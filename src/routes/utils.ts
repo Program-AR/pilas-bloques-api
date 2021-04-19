@@ -3,7 +3,7 @@ import * as nodemailer from 'nodemailer'
 import { DocumentType } from '@typegoose/typegoose'
 import { User } from '../models/user'
 
-export type AutheticatedRequest = express.Request & { user: DocumentType<User> } & { transport: nodemailer.Transporter }
+export type AuthenticatedRequest = express.Request & { user: DocumentType<User> } & { transport: nodemailer.Transporter }
 
 export type RequestHandler = express.RequestHandler
 
@@ -13,6 +13,15 @@ export const syncHandler = (handler: RequestHandler): RequestHandler => async (r
   } catch (err) {
     next(err)
   }
+}
+
+export const configMailing = (transport: nodemailer.Transporter) => {
+  const router = express.Router()
+  router.use(syncHandler((req: AuthenticatedRequest, _res, next) => {
+    req.transport = transport
+    next()
+  }))
+  return router
 }
 
 export const ofuscate = (email: string) => {

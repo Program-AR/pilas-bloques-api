@@ -1,6 +1,6 @@
 import describeApi from './describeApi'
-import { matchBody, hasBodyProperty } from './utils'
-import { userJson, username, password, parentCUIL } from './sessionMock';
+import { matchBody, hasBodyProperty, emailSent } from './utils'
+import { userJson, username, password, parentCUIL } from './sessionMock'
 
 describeApi('Users', (request, { authenticated, token }) => {
 
@@ -97,7 +97,7 @@ describeApi('Users', (request, { authenticated, token }) => {
       await request().post('/register').send({ ...userJson, username: 'TEST', email: 'lita.sadosky@program.ar' })
       await request().post(`/password-recovery?username=TEST`)
         .expect(200)
-        //TODO: assert email sending
+        .then(emailSent('Recupero de contraseña'))
         .then(matchBody({ email: 'l**********y@program.ar' }))
     })
 

@@ -14,15 +14,17 @@ import { connectDB } from './persistence/db'
 connectDB()
 
 // Mail
-import mailing from './mailing'
+import {createTransport} from './mailing'
+const transport = createTransport()
 
 // API
 import routes from './routes'
+import { configMailing } from './routes/utils'
 
 const { log } = console
 const port = process.env.PORT
 const app = express()
-app.use(mailing)
+app.use(configMailing(transport))
 app.use(routes)
 app.listen(port, () => {
   log(`Server started at ${port}`)
