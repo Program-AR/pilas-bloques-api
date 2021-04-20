@@ -5,7 +5,7 @@ const APP_PASSWORD_RECOVERY_URL = `${process.env.APP_URL}${process.env.PASSWORD_
 
 export const passwordRecoveryMail = (user: User) => {
   const url = `${APP_PASSWORD_RECOVERY_URL}?token=${newToken(user)}`
-  return createMail(user.email, "Recupero de contraseña", `Entrá a ${url} y seguí los pasos.`)
+  return createMail(user.email, "Recupero de contraseña", `Entrá a <br/>${url}<br/> y seguí los pasos.`)
 }
 
 const createMail = (to: string, subject: string, content: string) => ({
@@ -26,7 +26,7 @@ const createMail = (to: string, subject: string, content: string) => ({
             </h3>
             <div style='padding:30pxfont-size:16px'>
               ${applyStyles(content)}
-              <p>Saludos,<br/>Equipo Gestión Ceibal<br/>Fundación Sadosky</p>
+              <p>Saludos,<br/>Equipo Pilas Bloques<br/>Fundación Sadosky</p>
               <img src="cid:sadoskyLogo2019-150px" />
             </div>
           </div>
