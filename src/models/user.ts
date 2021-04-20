@@ -20,7 +20,7 @@ export class User extends Base<string> {
   @prop({ required: true })
   parentName: string
   @prop({ required: true })
-  parentCUIL: string
+  parentDNI: string
   @prop()
   email?: string
   @prop({ _id: false, type: Answer })

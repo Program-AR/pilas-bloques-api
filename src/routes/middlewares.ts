@@ -15,8 +15,8 @@ export const passwordChangeAuth = syncHandler(async (req: AuthenticatedRequest, 
   if (body.token) {
     user = await authByToken(body.token)
   } else {
-    required(body, 'body', ['username', 'parentCUIL'])
-    user = await authByParentCUIL(body)
+    required(body, 'body', ['username', 'parentDNI'])
+    user = await authByparentDNI(body)
   }
   req.user = user
   next()
@@ -29,9 +29,9 @@ const authByToken = async (token: string) => {
   return user
 }
 
-const authByParentCUIL = async (body: { username: string, parentCUIL: string }) => {
+const authByparentDNI = async (body: { username: string, parentDNI: string }) => {
   const user = await UserModel.findByUsername(body.username).exec()
-  if (!user || user.parentCUIL !== body.parentCUIL) throw new WrongCredentials()
+  if (!user || user.parentDNI !== body.parentDNI) throw new WrongCredentials()
   return user
 }
 

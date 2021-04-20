@@ -1,6 +1,6 @@
 import describeApi from './describeApi'
 import { matchBody, hasBodyProperty, emailSent } from './utils'
-import { userJson, username, password, parentCUIL } from './sessionMock'
+import { userJson, username, password, parentDNI } from './sessionMock'
 
 describeApi('Users', (request, { authenticated, token }) => {
 
@@ -18,7 +18,7 @@ describeApi('Users', (request, { authenticated, token }) => {
     test('Register fails for required attributes', () =>
       request().post('/register')
         .send({ username, password })
-        .expect(400, 'Path `parentCUIL` is required.\nPath `parentName` is required.')
+        .expect(400, 'Path `parentDNI` is required.\nPath `parentName` is required.')
     )
 
     // SKIP: Not working in testing enviroment
@@ -56,9 +56,9 @@ describeApi('Users', (request, { authenticated, token }) => {
 
 
   describe('PUT /credentials', () => {
-    test('Change credentials by parent CUIL', async () => {
+    test('Change credentials by parent DNI', async () => {
       await request().put('/credentials')
-        .send({ username, parentCUIL, password: "NEW PASSWORD" })
+        .send({ username, parentDNI, password: "NEW PASSWORD" })
         .expect(200)
         .then(hasBodyProperty('token'))
 
@@ -80,14 +80,14 @@ describeApi('Users', (request, { authenticated, token }) => {
 
     test('Change credentials fails', () =>
       request().put('/credentials')
-        .send({ username, parentCUIL: 'WRONG', password })
+        .send({ username, parentDNI: 'WRONG', password })
         .expect(400, 'Wrong credentials')
     )
 
     test('Missing auth info', () =>
       request().put('/credentials')
         .send({ username, password })
-        .expect(400, 'Missing body parameters: parentCUIL')
+        .expect(400, 'Missing body parameters: parentDNI')
     )
   })
 

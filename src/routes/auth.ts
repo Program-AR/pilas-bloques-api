@@ -3,7 +3,7 @@ import { syncHandler, ofuscate, AuthenticatedRequest } from './utils'
 import UserModel, { User } from '../models/user'
 import { generatePassword, verifyPassword, newToken } from '../models/auth'
 import { tokenAuth, requiredBody, requiredQueryParams, passwordChangeAuth } from './middlewares'
-import { HttpCodeError } from './errorHandlers'
+import { HttpCodeError, WrongCredentials } from './errorHandlers';
 import { passwordRecoveryMail } from '../mailing/mails'
 
 const toJsonUser = (user: User) => ({ id: user._id, token: newToken(user), ...user.profile, answeredQuestionIds: user.answeredQuestionIds })
@@ -17,7 +17,7 @@ router.post('/register', requiredBody('username', 'password'), syncHandler(async
 
 router.post('/login', requiredBody('username', 'password'), syncHandler(async ({ body }: AuthenticatedRequest, res) => {
   const user = await UserModel.findByUsername(body.username).exec()
-  if (!user || !verifyPassword(body.password, user)) throw new HttpCodeError(400, "Wrong credentials")
+  if (!user || !verifyPassword(body.password, user)) throw new WrongCredentials()
   res.json(toJsonUser(user))
 }))
 
