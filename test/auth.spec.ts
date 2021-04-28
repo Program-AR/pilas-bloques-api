@@ -97,7 +97,7 @@ describeApi('Users', (request, { authenticated, token }) => {
       await request().post('/register').send({ ...userJson, username: 'TEST', email: 'lita.sadosky@program.ar' })
       await request().post(`/password-recovery?username=TEST`)
         .expect(200)
-        .then(emailSent('Recupero de contraseña'))
+        .then(emailSent('Cambiar tu contraseña de Pilas Bloques'))
         .then(matchBody({ email: 'l**********y@program.ar' }))
     })
 
