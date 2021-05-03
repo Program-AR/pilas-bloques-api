@@ -1,11 +1,15 @@
+import * as sinon from 'sinon'
 import * as express from 'express'
 import * as Request from 'supertest'
 import * as mongoose from 'mongoose'
 import * as fetchMock from 'fetch-mock'
 import router from '../src/routes'
 import { connectDB } from '../src/persistence/db'
+import { configMailing } from '../src/routes/utils'
+import { createTransport } from '../src/mailing'
 
 const analytics = process.env.PB_ANALYTICS_URI
+const transportMock = sinon.stub(createTransport())
 
 // SERVER
 export type Request = Request.SuperTest<Request.Test>
@@ -13,6 +17,7 @@ export const createServer = async () => {
   await connectDB()
   await dropDB()
   const app = express()
+  app.use(configMailing(transportMock as any))
   app.use(router)
   return Request(app)
 }
@@ -42,6 +47,12 @@ export const matchBody = <T = any>(expected: T) => (res: { body }) => {
 
 export const hasBodyProperty = (prop: string) => (res: { body }) => {
   expect(res.body).toHaveProperty(prop)
+  return res
+}
+
+export const emailSent = (subject: string) => (res: any) => {
+  expect(transportMock.sendMail.called).toBeTruthy()
+  expect(transportMock.sendMail.firstCall.firstArg).toMatchObject({ subject })
   return res
 }
 

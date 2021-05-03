@@ -81,3 +81,9 @@ export class NotFound extends ClientError {
     super(`Missing ${label || 'entity'}`)
   }
 }
+
+export class WrongCredentials extends ClientError {
+  constructor() {
+    super(`Wrong credentials`)
+  }
+}

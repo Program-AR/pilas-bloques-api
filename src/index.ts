@@ -1,3 +1,6 @@
+// SERVER
+import * as express from 'express'
+
 // ENV VAR
 import * as dotenv from 'dotenv'
 dotenv.config() // Do first!
@@ -10,12 +13,18 @@ global.fetch = fetch as any
 import { connectDB } from './persistence/db'
 connectDB()
 
-// SERVER
-import * as express from 'express'
+// Mail
+import {createTransport} from './mailing'
+const transport = createTransport()
+
+// API
 import routes from './routes'
+import { configMailing } from './routes/utils'
+
 const { log } = console
 const port = process.env.PORT
 const app = express()
+app.use(configMailing(transport))
 app.use(routes)
 app.listen(port, () => {
   log(`Server started at ${port}`)
