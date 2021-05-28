@@ -3,7 +3,7 @@ export const password = 'PASSWORD'
 export const parentDNI = 'DNI'
 
 export const userJson = {
-  username,
+  username: username.toLowerCase(),
   password,
   parentName: 'string',
   parentDNI,

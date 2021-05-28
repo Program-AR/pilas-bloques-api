@@ -8,7 +8,7 @@ export const passwordRecoveryMail = (user: User) => {
   const url = `${APP_PASSWORD_RECOVERY_URL}?token=${newToken(user)}`
   return createMail(user.email, "Cambiar tu contraseña de Pilas Bloques", `
     <img src="cid:${totoGlass.cid}" style="float:right"/>
-    <p>¡Hola ${user.username}!</p>
+    <p>¡Hola ${user.profile.nickName || user.username || ''}!</p>
     <p>Estás recibiendo este correo electrónico porque alguien pidió <strong>restablecer tu contraseña</strong> en Pilas Bloques. Si no fuiste vos, podés descartar este mensaje.</p>
     <p>
       Para restablecer tu contraseña, entrá acá y seguí los pasos:<br/>

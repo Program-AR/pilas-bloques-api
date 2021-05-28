@@ -64,3 +64,6 @@ export const fetchBodyMatch = (expected: any) => () => {
   const [, { body }] = fetchMock.lastCall()
   expect(body).toBe(JSON.stringify(expected))
 }
+
+// STRING
+export const cApItAlIzE = (word: string) => word.split('').map((char, i) => i % 2 == 1 ? char.toUpperCase() : char.toLowerCase()).join('')

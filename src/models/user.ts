@@ -34,8 +34,17 @@ export class User extends Base<string> {
 
   get answeredQuestionIds() { return this.answers.map(({ question }) => question.id) }
 
+  /**
+   * 
+   * @param username is the non-standarized username (could have UpperCase letters)
+   * @returns the user from the DB
+   */
   static findByUsername(this: ReturnModelType<typeof User>, username: string) {
-    return this.findOne({ 'username': username })
+    return this.findOne({ 'username': this.standarizeUsername(username) })
+  }
+
+  static standarizeUsername(this: ReturnModelType<typeof User>, username: string) {
+    return username.toLowerCase()
   }
 }
 

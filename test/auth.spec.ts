@@ -1,6 +1,7 @@
 import describeApi from './describeApi'
-import { matchBody, hasBodyProperty, emailSent } from './utils'
+import { matchBody, hasBodyProperty, emailSent, cApItAlIzE } from './utils'
 import { userJson, username, password, parentDNI } from './sessionMock'
+import { mongoose } from '@typegoose/typegoose'
 
 describeApi('Users', (request, { authenticated, token }) => {
 
@@ -27,11 +28,18 @@ describeApi('Users', (request, { authenticated, token }) => {
         .send(userJson)
         .expect(400, 'Duplicate key error.')
     )
+
+    // SKIP: Not working in testing enviroment
+    test.skip('Register existing username with different capitalization', () =>
+      request().post('/register')
+        .send({...userJson, username: cApItAlIzE(username)})
+        .expect(400, 'Duplicate key error.')
+    )
   })
 
 
   describe('POST /login', () => {
-    test('Do login', () =>
+    const expectLoginOK = (user: string) => () =>
       request().post('/login')
         .send({ username, password })
         .expect(200)
@@ -39,6 +47,13 @@ describeApi('Users', (request, { authenticated, token }) => {
         .then(hasBodyProperty('id'))
         .then(hasBodyProperty('token'))
         .then(hasBodyProperty('answeredQuestionIds'))
+
+    test('Do login', 
+      expectLoginOK(username)
+    )
+
+    test('Login using different username capitalization still works', 
+      expectLoginOK(cApItAlIzE(username))
     )
 
     test('Login wrong credentials', () =>
@@ -145,6 +160,12 @@ describeApi('Users', (request, { authenticated, token }) => {
 
     test('Check used username', () =>
       request().get(`/users/exists?username=${username}`)
+        .send()
+        .expect(200, 'true')
+    )
+
+    test('Check used username with different capitalization', () =>
+      request().get(`/users/exists?username=${cApItAlIzE(username)}`)
         .send()
         .expect(200, 'true')
     )
