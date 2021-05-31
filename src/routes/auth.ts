@@ -11,7 +11,8 @@ const toJsonUser = (user: User) => ({ id: user._id, token: newToken(user), ...us
 const router = express.Router()
 
 router.post('/register', requiredBody('username', 'password'), syncHandler(async ({ body }: AuthenticatedRequest, res) => {
-  const user = await UserModel.create({ ...body, ...generatePassword(body.password) })
+  const username = UserModel.standarizeUsername(body.username)
+  const user = await UserModel.create({ ...body, username, ...generatePassword(body.password) })
   res.json(toJsonUser(user))
 }))
 
