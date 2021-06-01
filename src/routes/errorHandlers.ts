@@ -30,7 +30,7 @@ const serverErrorHandler: ErrorRequestHandler = (err: ServerError, req, res, _ne
 const parseValidationError = (err: ValidationError) =>
   Object.values(err.errors).map(e => e.message).join('\n')
 
-const parseMongoError = (code: number) => {
+const parseMongoError = (code: number | string) => {
   switch (code) {
     case 11000:
       return 'Duplicate key error.'
