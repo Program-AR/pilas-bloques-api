@@ -1,6 +1,6 @@
 import { syncHandler, RequestHandler, AuthenticatedRequest } from './utils'
 import { DocumentType } from '@typegoose/typegoose'
-import UserModel, { User } from '../models/user'
+import UserModel, { User } from 'pilas-bloques-models/src/user'
 import { parseToken } from '../models/auth'
 import { NotFound, ParametersNotFound, Unauthorized, WrongCredentials } from './errorHandlers'
 

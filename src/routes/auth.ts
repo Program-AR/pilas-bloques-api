@@ -1,9 +1,9 @@
 import * as express from 'express'
 import { syncHandler, ofuscate, AuthenticatedRequest } from './utils'
-import UserModel, { User } from '../models/user'
+import UserModel, { User } from 'pilas-bloques-models/src/user'
 import { generatePassword, verifyPassword, newToken } from '../models/auth'
 import { tokenAuth, requiredBody, requiredQueryParams, passwordChangeAuth } from './middlewares'
-import { HttpCodeError, WrongCredentials } from './errorHandlers';
+import { HttpCodeError, WrongCredentials } from './errorHandlers'
 import { passwordRecoveryMail } from '../mailing/mails'
 
 const toJsonUser = (user: User) => ({ id: user._id, token: newToken(user), ...user.profile, answeredQuestionIds: user.answeredQuestionIds })

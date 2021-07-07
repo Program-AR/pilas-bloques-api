@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { syncHandler, AuthenticatedRequest } from './utils'
 import { tokenAuth, mirrorTo, tryy, onlyIfAuth, end } from './middlewares'
-import SolutionModel from '../models/solution'
+import SolutionModel from 'pilas-bloques-models/src/solution'
 
 const router = express.Router()
 
