@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { syncHandler, ofuscate, AuthenticatedRequest } from './utils'
-import UserModel, { User } from 'pilas-bloques-models/src/user'
+import { User, UserModel } from 'pilas-bloques-models'
 import { generatePassword, verifyPassword, newToken } from '../models/auth'
 import { tokenAuth, requiredBody, requiredQueryParams, passwordChangeAuth } from './middlewares'
 import { HttpCodeError, WrongCredentials } from './errorHandlers'
