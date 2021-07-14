@@ -10,7 +10,8 @@
     "test": "DOTENV_CONFIG_PATH=.env.test jest --setupFiles dotenv/config --colors --testPathIgnorePatterns dist --testTimeout 5000 --runInBand",
     "release": "release patch",
     "prepackage": "npm run build && cp -R node_modules dist/",
-    "package": "tar -czvf pilasbloques-api.tar.gz dist/*"
+    "package": "tar -czvf pilasbloques-api.tar.gz dist/*",
+    "updateModels": "cd ../pilas-bloques-models/ && rm -f *.tgz && npm pack && cd ../pilas-bloques-api/ && rm -Rf node_modules/pilas-bloques-models && npm install ../pilas-bloques-models/pilas-bloques-models-*.tgz"
   },
   "author": "Fundación Sadosky",
   "license": "ISC",
@@ -23,7 +24,7 @@
     "mongoose": "^5.10.1",
     "node-fetch": "^2.6.1",
     "nodemailer": "^6.5.0",
-    "pilas-bloques-models": "^1.1.7",
+    "pilas-bloques-models": "^1.1.9",
     "ts-node": "^9.0.0"
   },
   "devDependencies": {
