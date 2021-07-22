@@ -1,7 +1,6 @@
 import describeApi from './describeApi'
 import { matchBody, hasBodyProperty, emailSent, cApItAlIzE } from './utils'
 import { userJson, username, password, parentDNI } from './sessionMock'
-import { mongoose } from '@typegoose/typegoose'
 
 describeApi('Users', (request, { authenticated, token }) => {
 
@@ -32,7 +31,7 @@ describeApi('Users', (request, { authenticated, token }) => {
     // SKIP: Not working in testing enviroment
     test.skip('Register existing username with different capitalization', () =>
       request().post('/register')
-        .send({...userJson, username: cApItAlIzE(username)})
+        .send({ ...userJson, username: cApItAlIzE(username) })
         .expect(400, 'Duplicate key error.')
     )
   })
@@ -48,11 +47,11 @@ describeApi('Users', (request, { authenticated, token }) => {
         .then(hasBodyProperty('token'))
         .then(hasBodyProperty('answeredQuestionIds'))
 
-    test('Do login', 
+    test('Do login',
       expectLoginOK(username)
     )
 
-    test('Login using different username capitalization still works', 
+    test('Login using different username capitalization still works',
       expectLoginOK(cApItAlIzE(username))
     )
 

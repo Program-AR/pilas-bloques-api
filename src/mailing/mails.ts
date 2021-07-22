@@ -1,5 +1,5 @@
 import { newToken } from '../models/auth'
-import { User } from '../models/user'
+import { User } from 'pilas-bloques-models'
 import { pilasBloquesLogo, programarLogo, sadoskyLogo, totoGlass } from './attatchments'
 
 const APP_PASSWORD_RECOVERY_URL = `${process.env.APP_URL}${process.env.PASSWORD_RECOVERY_PATH}`

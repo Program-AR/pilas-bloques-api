@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { syncHandler, AuthenticatedRequest } from './utils'
 import { tokenAuth, mirrorTo, tryy, onlyIfAuth, end } from './middlewares'
-import SolutionModel from '../models/solution'
+import { BaseSolutionModel } from 'pilas-bloques-models'
 
 const router = express.Router()
 
@@ -12,7 +12,7 @@ router.post('/challenges', mirror, end)
 router.get('/challenges/:challengeId/solution', tokenAuth, syncHandler(async (req: AuthenticatedRequest, res) => {
   const { user } = req
   const { challengeId } = req.params as any
-  const solution = await SolutionModel.findOne({ challengeId, user }).exec()
+  const solution = await BaseSolutionModel.findOne({ challengeId, user }).exec()
   res.json(solution)
 }))
 
@@ -20,13 +20,13 @@ router.post('/solutions', mirror, tryy(tokenAuth), onlyIfAuth, syncHandler(async
   const { user, body } = req
   const { challengeId } = body
   body.user = user
-  const result = await SolutionModel.updateOne({ challengeId, user }, body, { upsert: true }).exec()
+  const result = await BaseSolutionModel.updateOne({ challengeId, user }, body, { upsert: true }).exec()
   res.json(result) // TODO: Retrieve solution?
 }))
 
 router.put('/solutions/:solutionId', mirror, tryy(tokenAuth), onlyIfAuth, syncHandler(async (req: AuthenticatedRequest, res) => {
   const { solutionId } = req.params as any
-  const solution = await SolutionModel.findOne({ solutionId }).exec()
+  const solution = await BaseSolutionModel.findOne({ solutionId }).exec()
   await solution.set(req.body).save()
   res.json(solution)
 }))

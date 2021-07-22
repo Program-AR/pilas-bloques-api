@@ -1,7 +1,7 @@
 import * as express from 'express'
 import * as nodemailer from 'nodemailer'
 import { DocumentType } from '@typegoose/typegoose'
-import { User } from '../models/user'
+import { User } from 'pilas-bloques-models'
 
 export type AuthenticatedRequest = express.Request & { user: DocumentType<User> } & { transport: nodemailer.Transporter }
 

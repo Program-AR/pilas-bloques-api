@@ -1,7 +1,7 @@
 import * as jwt from 'jsonwebtoken'
 import * as crypto from 'crypto'
-import { User } from './user'
 import { Unauthorized } from '../routes/errorHandlers'
+import { User } from 'pilas-bloques-models'
 
 type EncodedPassword = {
   salt: string,
