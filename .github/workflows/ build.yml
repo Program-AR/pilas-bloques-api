@@ -34,13 +34,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Package
-          id: create_package
-          run: npm run package
+        id: create_package
+        run: npm run package
       - name: Release
-          uses: actions/upload-release-asset@v1
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
             upload_url: ${{ steps.create_release.outputs.create_package }}
             asset_path: ./pilasbloques-api.tar.gz
             asset_name: pilasbloques-api.tar.gz
