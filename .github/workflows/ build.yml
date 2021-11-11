@@ -35,6 +35,7 @@ jobs:
     steps:
       - name: Package
         id: create_package
+        run: npm install
         run: npm run package
       - name: Release
         uses: actions/upload-release-asset@v1
