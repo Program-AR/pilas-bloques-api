@@ -1,6 +1,6 @@
 #copypasted from https://github.com/Program-AR/pilas-bloques/blob/develop/.github/workflows/build.yml
 name: build
-on: [push]
+on: [push, release]
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -28,7 +28,7 @@ jobs:
         run: npm run test
 
   package-release: #https://github.com/actions/upload-release-asset
-    if: startsWith(github.ref, 'refs/tags/')
+    if: github.event_name == 'release'
     needs: test
     runs-on: ubuntu-latest
     steps:
