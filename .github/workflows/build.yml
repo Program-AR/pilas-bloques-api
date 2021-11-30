@@ -1,6 +1,10 @@
 #copypasted from https://github.com/Program-AR/pilas-bloques/blob/develop/.github/workflows/build.yml
 name: build
-on: [push, release]
+on: 
+  push:
+  release:
+   types:
+    - released
 jobs:
   test:
     runs-on: ubuntu-latest
