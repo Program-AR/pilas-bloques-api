@@ -27,3 +27,14 @@ All tests
 
 Only one file
 - Run `npm test -- -f <FILE_PATH>`
+
+## Releasing app
+
+- Run `npm run release:patch`.
+This bumps to the next version, creates a tag and creates a Github Release. 
+- On the window that pops choose release name, description and click **Publish Release**.
+This publishes the release and triggers the Github Action workflow that uploads the zip with the pilas-bloques-api files. 
+
+## Deploying app
+
+- https://github.com/fundacion-sadosky/containerization
