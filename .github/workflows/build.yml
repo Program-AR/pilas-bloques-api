@@ -31,29 +31,11 @@ jobs:
       - name: Run tests
         run: npm run test
 
-  package-release: #https://github.com/actions/upload-release-asset
+  package-release:
     if: github.event_name == 'release'
     needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-      - run: npm install
-      - run: npm run package
-
-      - name: Get release upload url
-        id: get_release
-        uses: bruceadams/get-release@v1.2.3
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-
-      - name: Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-            upload_url: ${{ steps.get_release.outputs.upload_url }}
-            asset_path: ./pilasbloques-api.tar.gz
-            asset_name: pilasbloques-api.tar.gz
-            asset_content_type: application/gzip
+    uses: Program-AR/pilas-bloques/.github/workflows/release.yml@f7c0f65b070b3ce1af26230f9dd122e2256d09a1
+    with:
+      asset_name: pilasbloques-api.tar.gz
+      asset_path: ./pilasbloques-api.tar.gz
         
