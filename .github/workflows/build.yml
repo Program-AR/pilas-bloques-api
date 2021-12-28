@@ -1,12 +1,11 @@
-#copypasted from https://github.com/Program-AR/pilas-bloques/blob/develop/.github/workflows/build.yml
 name: build
 on: 
   push:
   release:
    types:
     - released
+    
 jobs:
-
   cache:
     uses: Program-AR/pilas-bloques/.github/workflows/cache.yml@bd6732b1ffcacdeed1a68e4ed2ffbdfc6b71252d
 
@@ -16,9 +15,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
       - uses: supercharge/mongodb-github-action@1.6.0
-      - name: Cache dependencies
       - run: npm install
-
       - name: Run tests
         run: npm run test
 
