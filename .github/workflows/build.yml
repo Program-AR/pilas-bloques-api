@@ -6,6 +6,10 @@ on:
    types:
     - released
 jobs:
+
+  cache:
+    uses: Program-AR/pilas-bloques/.github/workflows/cache.yml@bd6732b1ffcacdeed1a68e4ed2ffbdfc6b71252d
+
   test:
     runs-on: ubuntu-latest
     steps:
@@ -13,7 +17,6 @@ jobs:
       - uses: actions/setup-node@v1
       - uses: supercharge/mongodb-github-action@1.6.0
       - name: Cache dependencies
-        uses: Program-AR/pilas-bloques/.github/workflows/cache.yml@bd6732b1ffcacdeed1a68e4ed2ffbdfc6b71252d
       - run: npm install
 
       - name: Run tests
