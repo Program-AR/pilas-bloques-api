@@ -10,6 +10,7 @@ jobs:
     uses: Program-AR/pilas-bloques/.github/workflows/cache.yml@bd6732b1ffcacdeed1a68e4ed2ffbdfc6b71252d
 
   test:
+    needs: cache
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
