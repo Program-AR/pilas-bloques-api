@@ -7,7 +7,16 @@ on:
     - released
 jobs:
   test:
-    uses: Program-AR/pilas-bloques/.github/workflows/test_prueba.yml@12e1988d002cab40757efb91747fd8397aef7806
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+      - uses: supercharge/mongodb-github-action@1.6.0
+      - uses: Program-AR/pilas-bloques/.github/workflows/cache.yml@bd6732b1ffcacdeed1a68e4ed2ffbdfc6b71252d
+      - run: npm install
+
+      - name: Run tests
+        run: npm run test
 
   package-release:
     if: github.event_name == 'release'
