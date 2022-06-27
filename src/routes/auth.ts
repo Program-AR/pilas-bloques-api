@@ -6,7 +6,7 @@ import { tokenAuth, requiredBody, requiredQueryParams, passwordChangeAuth } from
 import { HttpCodeError, WrongCredentials } from './errorHandlers'
 import { passwordRecoveryMail } from '../mailing/mails'
 
-const toJsonUser = (user: User) => ({ id: user._id, token: newToken(user), ...user.profile, answeredQuestionIds: user.answeredQuestionIds, experimentGroup: user.experimentGroup })
+const toJsonUser = (user: User) => ({ id: user._id, token: newToken(user), ...user.profile, answeredQuestionIds: user.answeredQuestionIds, experimentGroup: (user.experimentGroup || null)})
 
 const router = express.Router()
 
