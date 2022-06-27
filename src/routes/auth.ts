@@ -45,7 +45,7 @@ router.get('/profile', tokenAuth, syncHandler(async ({ user }: AuthenticatedRequ
 }))
 
 router.put('/experiment-group', tokenAuth, requiredBody('group'), syncHandler(async ({ user, body }: AuthenticatedRequest, res) => {
-  user.experimentGroup = body
+  user.experimentGroup = body.group
   await user.save()
   res.json(toJsonUser(user))
 }))
