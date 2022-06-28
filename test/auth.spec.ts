@@ -182,4 +182,11 @@ describeApi('Users', (request, { authenticated, token }) => {
       .expect(200)
       .then(matchBody({ answeredQuestionIds: [1] }))
   )
+
+  test('PUT /experiment-group', () =>
+    request().put(authenticated(`/experiment-group`))
+      .send({ group: "treatment"})
+      .expect(200)
+      .then(matchBody({ experimentGroup: "treatment"}))
+  )
 })
