@@ -13,11 +13,12 @@ describeApi('Users', (request, { authenticated, token }) => {
         .then(hasBodyProperty('id'))
         .then(hasBodyProperty('token'))
         .then(hasBodyProperty('answeredQuestionIds'))
+        .then(hasBodyProperty('experimentGroup'))
     )
 
     test('Register fails for required attributes', () =>
       request().post('/register')
-        .send({ username, password })
+        .send({ username, password, context: {experimentGroup: 'treatment'} })
         .expect(400, 'Path `parentDNI` is required.\nPath `parentName` is required.')
     )
 
