@@ -6,13 +6,14 @@ import { tokenAuth, requiredBody, requiredQueryParams, passwordChangeAuth } from
 import { HttpCodeError, WrongCredentials } from './errorHandlers'
 import { passwordRecoveryMail } from '../mailing/mails'
 
-const toJsonUser = (user: User) => ({ id: user._id, token: newToken(user), ...user.profile, answeredQuestionIds: user.answeredQuestionIds, experimentGroup: (user.experimentGroup || null)})
+const toJsonUser = (user: User) => ({ id: user._id, token: newToken(user), ...user.profile, answeredQuestionIds: user.answeredQuestionIds, experimentGroup: user.experimentGroup })
 
 const router = express.Router()
 
 router.post('/register', requiredBody('username', 'password'), syncHandler(async ({ body }: AuthenticatedRequest, res) => {
   const username = UserModel.standarizeUsername(body.username)
-  const user = await UserModel.create({ ...body, username, ...generatePassword(body.password) })
+  const experimentGroup = body.context.experimentGroup
+  const user = await UserModel.create({ ...body, experimentGroup, username, ...generatePassword(body.password) })
   res.json(toJsonUser(user))
 }))
 
