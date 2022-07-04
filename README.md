@@ -7,7 +7,12 @@ REST-API for Pilas Bloques app.
 
 ## Requisites
 - [Nodejs](https://nodejs.org/es/) (v12 >=)
-- [MonngoDB](https://www.mongodb.com/) (TODO: use Docker)
+- [MonngoDB](https://www.mongodb.com/). This can be done by running a docker image:
+
+Docker run example:
+```
+docker run -d --rm -p 27017:27017 -v $HOME/mongoData:/data/db --name mongoPilasBloques mongo:5.0.5
+```
 
 ## Config project
 - Checkout this repository.
