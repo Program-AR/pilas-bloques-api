@@ -7,6 +7,9 @@ export const userJson = {
   password,
   parentName: 'string',
   parentDNI,
+  context: {
+    experimentGroup: 'treatment'
+  },
   profile: {
     nickName: username,
     avatarURL: 'string'
