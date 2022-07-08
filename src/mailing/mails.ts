@@ -5,7 +5,7 @@ import { pilasBloquesLogo, programarLogo, sadoskyLogo, totoGlass } from './attat
 const APP_PASSWORD_RECOVERY_URL = `${process.env.APP_URL}${process.env.PASSWORD_RECOVERY_PATH}`
 
 export const passwordRecoveryMail = (user: User) => {
-  const url = `${APP_PASSWORD_RECOVERY_URL}?token=${newToken(user)}`
+  const url = `${APP_PASSWORD_RECOVERY_URL}?token=${newToken(user, 2)}`
   return createMail(user.email, "Cambiar tu contraseña de Pilas Bloques", `
     <img src="cid:${totoGlass.cid}" style="float:right"/>
     <p>¡Hola ${user.profile.nickName || user.username || ''}!</p>
