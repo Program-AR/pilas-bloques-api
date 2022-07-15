@@ -10,6 +10,7 @@ export const passwordRecoveryMail = (user: User) => {
     <img src="cid:${totoGlass.cid}" style="float:right"/>
     <p>¡Hola ${user.profile.nickName || user.username || ''}!</p>
     <p>Estás recibiendo este correo electrónico porque alguien pidió <strong>restablecer tu contraseña</strong> en Pilas Bloques. Si no fuiste vos, podés descartar este mensaje.</p>
+    <p>Si no utilizas este enlace en un plazo de 3 días, caducará.</p>
     <p>
       Para restablecer tu contraseña, entrá acá y seguí los pasos:<br/>
       <a href="${url}" style="color:${colors.link}">${url}</a>
