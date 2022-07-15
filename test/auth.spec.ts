@@ -1,6 +1,7 @@
 import describeApi from './describeApi'
 import { matchBody, hasBodyProperty, emailSent, cApItAlIzE } from './utils'
 import { userJson, username, password, parentDNI } from './sessionMock'
+import * as sinon from 'sinon'
 
 describeApi('Users', (request, { authenticated, token }) => {
 
@@ -103,6 +104,21 @@ describeApi('Users', (request, { authenticated, token }) => {
         .send({ username, password })
         .expect(400, 'Missing body parameters: parentDNI')
     )
+
+  //   test('fails when token is expired', async () => {
+  //      const tokencito = token()
+  //      const clock = sinon.useFakeTimers()
+  //      //clock.tick("48:00:00");
+  //         clock.setTimeout(async function () {
+  //           await request().put('/credentials')
+  //               .send({ token: tokencito, password: "NEW PASSWORD" })
+  //               .expect(200)
+  //               .then(hasBodyProperty('token'))
+  //         }, 15)
+  //         clock.tick(15);
+  //      }
+  //    )
+
   })
 
   describe('POST /password-recovery', () => {

@@ -3,9 +3,10 @@ import { User } from 'pilas-bloques-models'
 import { pilasBloquesLogo, programarLogo, sadoskyLogo, totoGlass } from './attatchments'
 
 const APP_PASSWORD_RECOVERY_URL = `${process.env.APP_URL}${process.env.PASSWORD_RECOVERY_PATH}`
+const PASSWORD_RECOVERY_EXPIRATION_DAYS = parseInt(process.env.PASSWORD_RECOVERY_EXPIRATION_DAYS)
 
 export const passwordRecoveryMail = (user: User) => {
-  const url = `${APP_PASSWORD_RECOVERY_URL}?token=${newToken(user, 2)}`
+  const url = `${APP_PASSWORD_RECOVERY_URL}?token=${newToken(user, PASSWORD_RECOVERY_EXPIRATION_DAYS)}`
   return createMail(user.email, "Cambiar tu contraseña de Pilas Bloques", `
     <img src="cid:${totoGlass.cid}" style="float:right"/>
     <p>¡Hola ${user.profile.nickName || user.username || ''}!</p>
