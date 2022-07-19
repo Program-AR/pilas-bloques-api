@@ -110,8 +110,8 @@ describeApi('Users', (request, { authenticated, token }) => {
 
   })
 
-  describe('Token expiration', () => {
-    const oldToken = newToken({ _id: username } as User, -1)
+  describe('Password restore token expiration', () => {
+    const oldToken = newToken({ _id: username } as User, 0)
 
     test('Trying to restore a password with an expired token fails', async () => {
       await request().put('/credentials')
