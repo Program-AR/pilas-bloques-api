@@ -3,13 +3,15 @@ import { User } from 'pilas-bloques-models'
 import { pilasBloquesLogo, programarLogo, sadoskyLogo, totoGlass } from './attatchments'
 
 const APP_PASSWORD_RECOVERY_URL = `${process.env.APP_URL}${process.env.PASSWORD_RECOVERY_PATH}`
+const PASSWORD_RECOVERY_EXPIRATION_DAYS = parseInt(process.env.PASSWORD_RECOVERY_EXPIRATION_DAYS)
 
 export const passwordRecoveryMail = (user: User) => {
-  const url = `${APP_PASSWORD_RECOVERY_URL}?token=${newToken(user)}`
+  const url = `${APP_PASSWORD_RECOVERY_URL}?token=${newToken(user, PASSWORD_RECOVERY_EXPIRATION_DAYS)}`
   return createMail(user.email, "Cambiar tu contraseña de Pilas Bloques", `
     <img src="cid:${totoGlass.cid}" style="float:right"/>
     <p>¡Hola ${user.profile.nickName || user.username || ''}!</p>
     <p>Estás recibiendo este correo electrónico porque alguien pidió <strong>restablecer tu contraseña</strong> en Pilas Bloques. Si no fuiste vos, podés descartar este mensaje.</p>
+    <p>Si no utilizas este enlace en un plazo de 3 días, caducará.</p>
     <p>
       Para restablecer tu contraseña, entrá acá y seguí los pasos:<br/>
       <a href="${url}" style="color:${colors.link}">${url}</a>

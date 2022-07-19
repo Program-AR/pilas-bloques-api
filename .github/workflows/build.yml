@@ -1,11 +1,13 @@
 name: build
 on: 
-  push:
+  push: # runs on every push to this repo
+  pull_request: # and for outside collaborations
   release:
    types:
     - released
 jobs:
-  test:
+  test: # condition below avoids double runs for local pull requests:
+    if: ${{ github.event_name == 'push' || !startsWith(github.event.pull_request.head.repo.full_name, github.repository_owner) }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

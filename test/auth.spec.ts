@@ -1,6 +1,8 @@
 import describeApi from './describeApi'
 import { matchBody, hasBodyProperty, emailSent, cApItAlIzE } from './utils'
 import { userJson, username, password, parentDNI } from './sessionMock'
+import { newToken } from '../src/models/auth'
+import { User } from 'pilas-bloques-models'
 
 describeApi('Users', (request, { authenticated, token }) => {
 
@@ -104,6 +106,19 @@ describeApi('Users', (request, { authenticated, token }) => {
         .send({ username, password })
         .expect(400, 'Missing body parameters: parentDNI')
     )
+
+
+  })
+
+  describe('Password restore token expiration', () => {
+    const oldToken = newToken({ _id: username } as User, 0)
+
+    test('Trying to restore a password with an expired token fails', async () => {
+      await request().put('/credentials')
+        .send({ token: oldToken, password: "NEW PASSWORD" })
+        .expect(401)
+    })
+
   })
 
   describe('POST /password-recovery', () => {

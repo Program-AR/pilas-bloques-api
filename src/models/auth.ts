@@ -27,9 +27,9 @@ type TokenData = {
 
 const secret = process.env.JWT_SECRET || 'test'
 
-export const newToken = (user: User) => generateToken({ id: user._id })
+export const newToken = (user: User, daysUntilExpiration: number) => generateToken({ id: user._id }, daysUntilExpiration)
 
-export const generateToken = (data: TokenData): string => jwt.sign(data, secret)
+const generateToken = (data: TokenData, dayUntilExpiration: number): string => jwt.sign(data, secret, { expiresIn: dayUntilExpiration + ' days' })
 
 export const parseToken = (token: string): TokenData => {
   try { return jwt.verify(token, secret) as TokenData }
