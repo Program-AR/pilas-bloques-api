@@ -1,7 +1,8 @@
 import describeApi from './describeApi'
 import { matchBody, hasBodyProperty, emailSent, cApItAlIzE } from './utils'
 import { userJson, username, password, parentDNI } from './sessionMock'
-import * as sinon from 'sinon'
+import { newToken } from '../src/models/auth'
+import { User } from 'pilas-bloques-models'
 
 describeApi('Users', (request, { authenticated, token }) => {
 
@@ -105,19 +106,17 @@ describeApi('Users', (request, { authenticated, token }) => {
         .expect(400, 'Missing body parameters: parentDNI')
     )
 
-  //   test('fails when token is expired', async () => {
-  //      const tokencito = token()
-  //      const clock = sinon.useFakeTimers()
-  //      //clock.tick("48:00:00");
-  //         clock.setTimeout(async function () {
-  //           await request().put('/credentials')
-  //               .send({ token: tokencito, password: "NEW PASSWORD" })
-  //               .expect(200)
-  //               .then(hasBodyProperty('token'))
-  //         }, 15)
-  //         clock.tick(15);
-  //      }
-  //    )
+
+  })
+
+  describe('Token expiration', () => {
+    const oldToken = newToken({ _id: username } as User, -1)
+
+    test('Trying to restore a password with an expired token fails', async () => {
+      await request().put('/credentials')
+        .send({ token: oldToken, password: "NEW PASSWORD" })
+        .expect(401)
+    })
 
   })
 
