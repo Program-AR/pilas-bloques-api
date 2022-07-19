@@ -15,11 +15,12 @@ describeApi('Users', (request, { authenticated, token }) => {
         .then(hasBodyProperty('id'))
         .then(hasBodyProperty('token'))
         .then(hasBodyProperty('answeredQuestionIds'))
+        .then(hasBodyProperty('experimentGroup'))
     )
 
     test('Register fails for required attributes', () =>
       request().post('/register')
-        .send({ username, password })
+        .send({ username, password, context: {experimentGroup: 'treatment'} })
         .expect(400, 'Path `parentDNI` is required.\nPath `parentName` is required.')
     )
 
@@ -196,5 +197,12 @@ describeApi('Users', (request, { authenticated, token }) => {
       .send({ question: { id: 1 }, response: { text: "RESPONSE" } })
       .expect(200)
       .then(matchBody({ answeredQuestionIds: [1] }))
+  )
+
+  test('PUT /experiment-group', () =>
+    request().put(authenticated(`/experiment-group`))
+      .send({ group: "treatment"})
+      .expect(200)
+      .then(matchBody({ experimentGroup: "treatment"}))
   )
 })
