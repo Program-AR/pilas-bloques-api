@@ -3,9 +3,10 @@ import { syncHandler } from './utils'
 
 const router = express.Router()
 
-router.get('/user-ip', syncHandler(async (_req, res) => {
-    const response = await fetch("https://api64.ipify.org?format=json")
-    const jsonIp = await response.json()
+router.get('/user-ip', syncHandler(async (req, res) => {
+    const jsonIp = {
+        ip: req.ip
+    }
     res.json(jsonIp)
 }))
 
