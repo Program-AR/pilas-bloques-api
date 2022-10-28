@@ -24,6 +24,7 @@ import { configMailing } from './routes/utils'
 const { log } = console
 const port = process.env.PORT
 const app = express()
+app.set('trust proxy', true) // If true, the client’s IP address is understood as the left-most entry in the X-Forwarded-* header.
 app.use(configMailing(transport))
 app.use(routes)
 app.listen(port, () => {
