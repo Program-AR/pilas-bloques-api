@@ -2,7 +2,10 @@
 
 Hi! :vulcan_salute: This is a project related to [Pilas Bloques](https://pilasbloques.program.ar) :heart:. In that project's repository you'll find the [contribution guidelines](https://github.com/Program-AR/pilas-bloques/blob/develop/CONTRIBUTING_en.md) and the [code of conduct](https://github.com/Program-AR/pilas-bloques/blob/develop/CODE_OF_CONDUCT_en.md) which also apply to this project.
 
-# Pilas Bloques API
+# Pilas Bloques API (ARCHIVED)
+
+Now this project is shipped as part of https://github.com/Program-AR/pilas-bloques-backend
+
 REST-API for Pilas Bloques app.
 
 ## Requisites
